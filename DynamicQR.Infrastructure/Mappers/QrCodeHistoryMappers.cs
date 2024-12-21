@@ -1,6 +1,4 @@
 using System.Text.Json;
-using DynamicQR.Domain.Models;
-using DynamicQR.Infrastructure.Entities;
 
 namespace DynamicQR.Infrastructure.Mappers;
 
@@ -10,7 +8,7 @@ public static class QrCodeHistoryMappers
         => new DynamicQR.Domain.Models.QrCodeHistory
         {
             Order = entity.RowKey,
-            Timestamp = entity.Timestamp.UtcDateTime,
+            Timestamp = entity.Timestamp?.LocalDateTime ?? DateTime.UtcNow,
             CustomerId = entity.CustomerId,
             OrganizationId = entity.OrganizationId,
             EventType = entity.EventType,

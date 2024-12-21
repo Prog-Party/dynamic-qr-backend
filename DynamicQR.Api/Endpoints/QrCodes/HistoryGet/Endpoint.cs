@@ -1,6 +1,5 @@
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Extensions;
-using DynamicQR.Api.Mappers;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
