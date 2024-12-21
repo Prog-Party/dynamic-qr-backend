@@ -15,8 +15,4 @@
     <ProjectReference Include="..\DynamicQR.Domain\DynamicQR.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utility\" />
-  </ItemGroup>
-
 </Project>

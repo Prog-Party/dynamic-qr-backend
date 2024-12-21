@@ -2,6 +2,7 @@
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete;
 using DynamicQR.Domain.Exceptions;
+using DynamicQR.Domain.Interfaces;
 using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -18,6 +19,7 @@ public sealed class QrCodeDeleteTests
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
     private readonly QrCodeDelete _endpoint;
+    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
 
     public QrCodeDeleteTests()
     {
@@ -34,7 +36,9 @@ public sealed class QrCodeDeleteTests
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
 
-        _endpoint = new QrCodeDelete(_mediatorMock.Object, _loggerFactoryMock.Object);
+        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
+
+        _endpoint = new QrCodeDelete(_mediatorMock.Object, _loggerFactoryMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]

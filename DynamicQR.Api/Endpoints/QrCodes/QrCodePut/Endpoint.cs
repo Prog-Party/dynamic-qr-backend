@@ -9,20 +9,28 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using DynamicQR.Domain.Interfaces;
+using DynamicQR.Domain.Models;
+using DynamicQR.Domain;
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
 
 public sealed class QrCodePut : EndpointsBase
 {
-    public QrCodePut(IMediator mediator, ILoggerFactory loggerFactory) :
+    private readonly IQrCodeHistoryRepositoryService _qrCodeHistoryRepositoryService;
+
+    public QrCodePut(IMediator mediator, ILoggerFactory loggerFactory, IQrCodeHistoryRepositoryService qrCodeHistoryRepositoryService) :
         base(mediator, loggerFactory.CreateLogger<QrCodePut>())
-    { }
+    {
+        _qrCodeHistoryRepositoryService = qrCodeHistoryRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeHistoryRepositoryService));
+    }
 
     [Function(nameof(QrCodePut))]
     [OpenApiOperation(nameof(QrCodePut), Tags.QrCode,
        Summary = "Update a certain qr code.")
     ]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiHeaderCustomerIdentifier]
     [OpenApiPathIdentifier]
     [OpenApiJsonPayload(typeof(Request))]
     [OpenApiJsonResponse(typeof(Response), Description = "Update a certain qr code")]
@@ -32,6 +40,7 @@ public sealed class QrCodePut : EndpointsBase
         CancellationToken cancellationToken)
     {
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
+        string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
 
         var request = await ParseBody<Request>(req);
         if (request.Error != null) return request.Error;
@@ -51,6 +60,20 @@ public sealed class QrCodePut : EndpointsBase
 
         Response? responseContent = coreResponse.ToContract();
 
+        await LogHistory(id, organizationId, customerId, cancellationToken);
+
         return await CreateJsonResponse(req, responseContent);
+    }
+
+    private async Task LogHistory(string qrCodeId, string organizationId, string customerId, CancellationToken cancellationToken)
+    {
+        QrCodeHistory historyItem = new()
+        {
+            CustomerId = customerId,
+            OrganizationId = organizationId,
+            EventType = QrCodeEvents.Lifecycle.Updated
+        };
+
+        await _qrCodeHistoryRepositoryService.AddHistoryAsync(historyItem, cancellationToken);
     }
 }

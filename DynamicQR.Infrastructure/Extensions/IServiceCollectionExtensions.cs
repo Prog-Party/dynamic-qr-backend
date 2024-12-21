@@ -19,6 +19,7 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IQrCodeRepositoryService, QrCodeRepositoryService>();
         services.AddTransient<IQrCodeTargetRepositoryService, QrCodeTargetRepositoryService>();
+        services.AddTransient<IQrCodeHistoryRepositoryService, QrCodeHistoryRepositoryService>();
 
         services.AddAzureClients(clientBuilder =>
         {
