@@ -7,6 +7,7 @@ public static class QrCodeHistoryMappers
     public static DynamicQR.Domain.Models.QrCodeHistory ToCore(this DynamicQR.Infrastructure.Entities.QrCodeHistory entity)
         => new DynamicQR.Domain.Models.QrCodeHistory
         {
+            QrCodeId = entity.PartitionKey,
             Order = entity.RowKey,
             Timestamp = entity.Timestamp?.LocalDateTime ?? DateTime.UtcNow,
             CustomerId = entity.CustomerId,
@@ -18,7 +19,7 @@ public static class QrCodeHistoryMappers
     public static DynamicQR.Infrastructure.Entities.QrCodeHistory ToInfrastructure(this DynamicQR.Domain.Models.QrCodeHistory model)
         => new DynamicQR.Infrastructure.Entities.QrCodeHistory
         {
-            PartitionKey = model.OrganizationId,
+            PartitionKey = model.QrCodeId,
             RowKey = model.Order,
             Timestamp = new DateTimeOffset(model.Timestamp),
             CustomerId = model.CustomerId,

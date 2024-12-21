@@ -1,6 +1,6 @@
 ﻿namespace DynamicQR.Api.Endpoints.QrCodes.HistoryGet;
 
-internal static class Mapper
+public static class Mapper
 {
     public static Response? ToContract(this Application.QrCodes.Queries.GetQrCodeHistory.Response response)
     {
