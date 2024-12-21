@@ -9,20 +9,28 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using DynamicQR.Domain.Interfaces;
+using DynamicQR.Domain.Models;
+using DynamicQR.Domain;
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete;
 
 public sealed class QrCodeDelete : EndpointsBase
 {
-    public QrCodeDelete(IMediator mediator, ILoggerFactory loggerFactory) :
+    private readonly IQrCodeHistoryRepositoryService _qrCodeHistoryRepositoryService;
+
+    public QrCodeDelete(IMediator mediator, ILoggerFactory loggerFactory, IQrCodeHistoryRepositoryService qrCodeHistoryRepositoryService) :
         base(mediator, loggerFactory.CreateLogger<QrCodeDelete>())
-    { }
+    {
+        _qrCodeHistoryRepositoryService = qrCodeHistoryRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeHistoryRepositoryService));
+    }
 
     [Function(nameof(QrCodeDelete))]
     [OpenApiOperation(nameof(QrCodeDelete), Tags.QrCode,
        Summary = "Delete a specific new qr code.")
     ]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiHeaderCustomerIdentifier]
     [OpenApiPathIdentifier]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway)]
@@ -33,6 +41,7 @@ public sealed class QrCodeDelete : EndpointsBase
         CancellationToken cancellationToken)
     {
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
+        string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
 
         _logger.LogInformation($"{typeof(QrCodeDelete).FullName}.triggered");
 
@@ -51,6 +60,20 @@ public sealed class QrCodeDelete : EndpointsBase
             return req.CreateResponse(HttpStatusCode.NotFound);
         }
 
+        await LogHistory(id, organizationId, customerId, cancellationToken);
+
         return req.CreateResponse(HttpStatusCode.NoContent);
+    }
+
+    private async Task LogHistory(string qrCodeId, string organizationId, string customerId, CancellationToken cancellationToken)
+    {
+        QrCodeHistory historyItem = new()
+        {
+            CustomerId = customerId,
+            OrganizationId = organizationId,
+            EventType = QrCodeEvents.Lifecycle.Deleted
+        };
+
+        await _qrCodeHistoryRepositoryService.AddHistoryAsync(historyItem, cancellationToken);
     }
 }
