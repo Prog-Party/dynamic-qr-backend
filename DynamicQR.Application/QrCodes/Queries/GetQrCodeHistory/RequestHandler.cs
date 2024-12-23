@@ -7,11 +7,24 @@ public class RequestHandler : IRequestHandler<Request, List<Response>>
 {
     private readonly IQrCodeHistoryRepositoryService _qrCodeHistoryRepositoryService;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qrCodeHistoryRepositoryService"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="qrCodeHistoryRepositoryService"/> is null.</exception>
     public RequestHandler(IQrCodeHistoryRepositoryService qrCodeHistoryRepositoryService)
     {
         _qrCodeHistoryRepositoryService = qrCodeHistoryRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeHistoryRepositoryService));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
+    /// <returns></returns>
     public async Task<List<Response>> Handle(Request request, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(request);

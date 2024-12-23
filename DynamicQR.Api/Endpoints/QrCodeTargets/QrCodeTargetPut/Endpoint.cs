@@ -1,4 +1,5 @@
 ﻿using DynamicQR.Api.Attributes;
+using DynamicQR.Api.Extensions;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -23,18 +24,23 @@ public sealed class QrCodeTargetPut : EndpointsBase
        Summary = "Update a certain qr code target.")
     ]
     [OpenApiPathIdentifier]
+    [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiHeaderCustomerIdentifier]
     [OpenApiJsonPayload(typeof(Request))]
     [OpenApiJsonResponse(typeof(Response), Description = "Update a certain qr code target")]
-    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Request couldn't be parsed.")]
+    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Request couldn't be parsed. Or missing organization identifier header. Or missing customer identifier header.")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway, Description = "No qr code target found with the given identifier.")]
     public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-code-targets/{id}")] HttpRequestData req,
         string id,
         CancellationToken cancellationToken)
     {
+        string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
+        string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
+
         var request = await ParseBody<Request>(req);
         if (request.Error != null) return request.Error;
 
-        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, id);
+        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, id, organizationId, customerId);
 
         ApplicationResponse coreResponse;
 

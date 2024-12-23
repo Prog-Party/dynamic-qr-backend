@@ -9,6 +9,11 @@ public sealed class QrCodeHistoryRepositoryService : IQrCodeHistoryRepositorySer
 {
     private readonly TableClient _tableClient;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tableServiceClient"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="tableServiceClient"/> is null.</exception>
     public QrCodeHistoryRepositoryService(TableServiceClient tableServiceClient)
     {
         ArgumentNullException.ThrowIfNull(tableServiceClient);
@@ -16,6 +21,14 @@ public sealed class QrCodeHistoryRepositoryService : IQrCodeHistoryRepositorySer
         _tableClient = tableServiceClient.GetTableClient(tableName: "qrcodehistory");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qrCodeId"></param>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="qrCodeId"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
+    /// <returns></returns>
     public async Task<List<QrCodeHistory>> GetHistoryAsync(string qrCodeId, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(qrCodeId);
@@ -30,6 +43,14 @@ public sealed class QrCodeHistoryRepositoryService : IQrCodeHistoryRepositorySer
         return historyItems;
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="historyItem"></param>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="historyItem"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
+    /// <returns></returns>
     public async Task AddHistoryAsync(QrCodeHistory historyItem, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(historyItem);

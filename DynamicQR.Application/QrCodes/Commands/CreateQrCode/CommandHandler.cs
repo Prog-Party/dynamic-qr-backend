@@ -14,6 +14,13 @@ public class CommandHandler : IRequestHandler<Command, Response>
     private readonly IQrCodeHistoryRepositoryService _qrCodeHistoryRepositoryService;
     private const int QrCodeIdLength = 8;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qrCodeRepositoryService"></param>
+    /// <param name="qrCodeTargetRepositoryService"></param>
+    /// <param name="qrCodeHistoryRepositoryService"></param>
+    /// <exception cref="ArgumentNullException"></exception>
     public CommandHandler(IQrCodeRepositoryService qrCodeRepositoryService, IQrCodeTargetRepositoryService qrCodeTargetRepositoryService, IQrCodeHistoryRepositoryService qrCodeHistoryRepositoryService)
     {
         _qrCodeRepositoryService = qrCodeRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeRepositoryService));
@@ -21,6 +28,13 @@ public class CommandHandler : IRequestHandler<Command, Response>
         _qrCodeHistoryRepositoryService = qrCodeHistoryRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeHistoryRepositoryService));
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="command"></param>
+    /// <param name="cancellationToken"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <returns></returns>
     public async Task<Response> Handle(Command command, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(command);

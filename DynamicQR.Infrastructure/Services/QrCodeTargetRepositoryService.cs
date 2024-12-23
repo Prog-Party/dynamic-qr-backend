@@ -11,6 +11,11 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
 {
     private readonly TableClient _tableClient;
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="tableServiceClient"></param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="tableServiceClient"/> is null.</exception>
     public QrCodeTargetRepositoryService(TableServiceClient tableServiceClient)
     {
         ArgumentNullException.ThrowIfNull(tableServiceClient);
@@ -18,6 +23,15 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
         _tableClient = tableServiceClient.GetTableClient(tableName: "qrcodetargets");
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qrCodeTarget"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="StorageException"></exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="qrCodeTarget"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
     public async Task CreateAsync(QrCodeTarget qrCodeTarget, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(qrCodeTarget);
@@ -30,6 +44,15 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
             throw new StorageException(response.ReasonPhrase);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="StorageException"></exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="id"/> is null</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
     public async Task<QrCodeTarget> ReadAsync(string id, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(id);
@@ -42,9 +65,20 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
         throw new StorageException();
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="qrCodeTarget"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="QrCodeTargetNotFoundException"></exception>
+    /// <exception cref="StorageException"></exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="qrCodeTarget"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
     public async Task UpdateAsync(QrCodeTarget qrCodeTarget, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(qrCodeTarget);
+
         Entities.QrCodeTarget qrCodeTargetInput = QrCodeTargetMappers.ToInfrastructure(qrCodeTarget);
 
         Azure.NullableResponse<Entities.QrCodeTarget> data = await _tableClient.GetEntityIfExistsAsync<Entities.QrCodeTarget>(qrCodeTarget.QrCodeId, qrCodeTarget.QrCodeId, cancellationToken: cancellationToken);
@@ -62,6 +96,16 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
             throw new StorageException(response.ReasonPhrase);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="QrCodeTargetNotFoundException"></exception>
+    /// <exception cref="StorageException"></exception>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="id"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
     public async Task DeleteAsync(string id, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(id);
@@ -79,6 +123,14 @@ public sealed class QrCodeTargetRepositoryService : IQrCodeTargetRepositoryServi
             throw new StorageException(response.ReasonPhrase);
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="id"/> is null.</exception>
+    /// <exception cref="Azure.RequestFailedException"></exception>
     public async Task<bool> Exists(string id, CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(id);

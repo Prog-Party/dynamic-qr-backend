@@ -36,7 +36,6 @@ public class CommandHandler : IRequestHandler<Command, Response>
         return new Response { Id = command.Id };
     }
 
-
     private async Task LogHistory(Command command, CancellationToken cancellationToken)
     {
         Dictionary<string, string> details = new()
