@@ -1,6 +1,5 @@
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Extensions;
-using DynamicQR.Api.Mappers;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -9,20 +8,16 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
-using DynamicQR.Domain.Interfaces;
-using DynamicQR.Domain.Models;
-using DynamicQR.Domain;
+using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.CreateQrCode.Command;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.CreateQrCode.Response;
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
 
 public sealed class QrCodePost : EndpointsBase
 {
-    private readonly IQrCodeHistoryRepositoryService _qrCodeHistoryRepositoryService;
-
-    public QrCodePost(IMediator mediator, ILoggerFactory loggerFactory, IQrCodeHistoryRepositoryService qrCodeHistoryRepositoryService) :
+    public QrCodePost(IMediator mediator, ILoggerFactory loggerFactory) :
         base(mediator, loggerFactory.CreateLogger<QrCodePost>())
     {
-        _qrCodeHistoryRepositoryService = qrCodeHistoryRepositoryService ?? throw new ArgumentNullException(nameof(qrCodeHistoryRepositoryService));
     }
 
     [Function(nameof(QrCodePost))]
@@ -34,7 +29,7 @@ public sealed class QrCodePost : EndpointsBase
     [OpenApiJsonPayload(typeof(Request))]
     [OpenApiJsonResponse(typeof(Response), HttpStatusCode.Created, Description = "Get a certain qr code")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway)]
-    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header")]
+    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header. Or missing customer identifier header.")]
     public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "post", Route = "qr-codes")] HttpRequestData req,
         CancellationToken cancellationToken)
     {
@@ -44,9 +39,9 @@ public sealed class QrCodePost : EndpointsBase
         var request = await ParseBody<Request>(req);
         if (request.Error != null) return request.Error;
 
-        Application.QrCodes.Commands.CreateQrCode.Command? coreCommand = QrCodesMappers.ToCore(request.Result, organizationId);
+        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, organizationId, customerId);
 
-        Application.QrCodes.Commands.CreateQrCode.Response coreResponse;
+        ApplicationResponse coreResponse;
 
         try
         {
@@ -57,22 +52,8 @@ public sealed class QrCodePost : EndpointsBase
             return req.CreateResponse(HttpStatusCode.BadGateway);
         }
 
-        Response? responseContent = coreResponse.ToContract();
-
-        await LogHistory(coreResponse.Id, organizationId, customerId, cancellationToken);
+        Response? responseContent = Mapper.ToContract(coreResponse);
 
         return await CreateJsonResponse(req, responseContent, HttpStatusCode.Created);
-    }
-
-    private async Task LogHistory(string qrCodeId, string organizationId, string customerId, CancellationToken cancellationToken)
-    {
-        QrCodeHistory historyItem = new()
-        {
-            CustomerId = customerId,
-            OrganizationId = organizationId,
-            EventType = QrCodeEvents.Lifecycle.Created
-        };
-
-        await _qrCodeHistoryRepositoryService.AddHistoryAsync(historyItem, cancellationToken);
     }
 }

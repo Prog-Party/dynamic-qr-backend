@@ -1,10 +1,10 @@
-﻿using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Azure.Functions.Worker;
-using System.Security.Claims;
+﻿using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Newtonsoft.Json;
+using System.Security.Claims;
 using System.Text;
 
-namespace Api.Tests.Endpoints.QrCodes.Mocks;
+namespace Api.Tests.Endpoints.Mocks;
 
 public class MockHttpRequestData : HttpRequestData
 {

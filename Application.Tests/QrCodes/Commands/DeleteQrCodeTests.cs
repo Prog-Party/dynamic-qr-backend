@@ -12,13 +12,15 @@ public sealed class DeleteQrCodeTests
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
+    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
     public DeleteQrCodeTests()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
-        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeTargetRepositoryServiceMock.Object);
+        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
+        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeTargetRepositoryServiceMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
     }
 
     [Fact]
@@ -28,11 +30,11 @@ public sealed class DeleteQrCodeTests
         var command = new Command
         {
             Id = "qr123",
-            OrganisationId = "org456"
+            OrganizationId = "org456"
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.DeleteAsync(command.OrganisationId, command.Id, It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.DeleteAsync(command.OrganizationId, command.Id, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         _qrCodeTargetRepositoryServiceMock
@@ -46,7 +48,7 @@ public sealed class DeleteQrCodeTests
         result.Should().Be(Unit.Value);
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.DeleteAsync(command.OrganisationId, command.Id, It.IsAny<CancellationToken>()),
+            repo.DeleteAsync(command.OrganizationId, command.Id, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 
@@ -57,11 +59,11 @@ public sealed class DeleteQrCodeTests
         var command = new Command
         {
             Id = "qr123",
-            OrganisationId = "org456"
+            OrganizationId = "org456"
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.DeleteAsync(command.OrganisationId, command.Id, It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.DeleteAsync(command.OrganizationId, command.Id, It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException("Repository exception"));
 
         _qrCodeTargetRepositoryServiceMock
@@ -95,11 +97,11 @@ public sealed class DeleteQrCodeTests
         var command = new Command
         {
             Id = string.Empty,
-            OrganisationId = string.Empty
+            OrganizationId = string.Empty
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.DeleteAsync(command.OrganisationId, command.Id, It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.DeleteAsync(command.OrganizationId, command.Id, It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         _qrCodeTargetRepositoryServiceMock
@@ -113,7 +115,7 @@ public sealed class DeleteQrCodeTests
         result.Should().Be(Unit.Value);
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.DeleteAsync(command.OrganisationId, command.Id, It.IsAny<CancellationToken>()),
+            repo.DeleteAsync(command.OrganizationId, command.Id, It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }

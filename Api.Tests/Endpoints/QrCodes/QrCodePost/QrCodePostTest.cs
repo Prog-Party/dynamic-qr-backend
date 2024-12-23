@@ -1,29 +1,30 @@
-﻿using Api.Tests.Endpoints.QrCodes.Mocks;
+﻿using Api.Tests.Endpoints.Mocks;
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints;
-using DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
-using DynamicQR.Domain.Interfaces;
+using DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
 using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.CreateQrCode.Command;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.CreateQrCode.Response;
+using QrCodePostEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodePost.QrCodePost;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodePost;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePutTests
+public sealed class QrCodePostTest
 {
-    private readonly Mock<ILogger<QrCodePut>> _loggerMock;
+    private readonly Mock<ILogger<QrCodePostEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly QrCodePut _endpoint;
-    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
+    private readonly QrCodePostEndpoint _endpoint;
 
-    public QrCodePutTests()
+    public QrCodePostTest()
     {
-        _loggerMock = new Mock<ILogger<QrCodePut>>();
+        _loggerMock = new Mock<ILogger<QrCodePostEndpoint>>();
         _loggerMock.Setup(x => x.Log(
                     LogLevel.Information,
                     It.IsAny<EventId>(),
@@ -36,20 +37,17 @@ public sealed class QrCodePutTests
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
 
-        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
-
-        _endpoint = new QrCodePut(_mediatorMock.Object, _loggerFactoryMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
+        _endpoint = new QrCodePostEndpoint(_mediatorMock.Object, _loggerFactoryMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
     public async Task RunAsync_MissingOrganizationHeader_ReturnsBadRequest()
     {
         // Arrange
-        var req = HttpRequestDataHelper.CreateWithHeaders(HttpMethod.Put, []);
-        string id = "qr123";
+        var req = HttpRequestDataHelper.CreateWithHeaders(HttpMethod.Post, []);
 
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -61,15 +59,13 @@ public sealed class QrCodePutTests
     public async Task RunAsync_InvalidRequestBody_ReturnsBadRequest()
     {
         // Arrange
-        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Put, new Dictionary<string, string>
+        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Post, new Dictionary<string, string>
         {
             { "Organization-Identifier", "org-123" }
         }, null!);
 
-        string id = "qr123";
-
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
@@ -87,37 +83,35 @@ public sealed class QrCodePutTests
             ForegroundColor = "#000000",
             ImageHeight = 200,
             ImageWidth = 200,
+            Value = "TestQRCode",
             IncludeMargin = true,
-            ImageUrl = "https://example.com/updated.png"
+            ImageUrl = "https://example.com/test.png"
         };
 
-        var expectedCoreResponse = new DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response
+        var expectedCoreResponse = new ApplicationResponse
         {
             Id = "qr123"
         };
 
-        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Put, new Dictionary<string, string>
+        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Post, new Dictionary<string, string>
         {
             { "Organization-Identifier", "org-123" }
         }, validRequest);
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedCoreResponse);
 
-        string id = "qr123";
-
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
-        result.StatusCode.Should().Be(HttpStatusCode.OK);
+        result.StatusCode.Should().Be(HttpStatusCode.Created);
 
         var responseBody = await ((MockHttpResponseData)result).ReadAsJsonAsync<Response>();
-        responseBody.Should().NotBeNull();
         responseBody!.Id.Should().Be(expectedCoreResponse.Id);
 
-        _mediatorMock.Verify(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -130,43 +124,41 @@ public sealed class QrCodePutTests
             ForegroundColor = "#000000",
             ImageHeight = 200,
             ImageWidth = 200,
+            Value = "TestQRCode",
             IncludeMargin = true,
-            ImageUrl = "https://example.com/updated.png"
+            ImageUrl = "https://example.com/test.png"
         };
 
-        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Put, new Dictionary<string, string>
+        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Post, new Dictionary<string, string>
         {
             { "Organization-Identifier", "org-123" }
         }, validRequest);
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Microsoft.Azure.Storage.StorageException());
 
-        string id = "qr123";
-
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.BadGateway);
     }
 
-    [Fact]
+    [Fact(Skip = "Skip this test until middleware is added to the tests")]
     public async Task RunAsync_EmptyRequestBody_ReturnsBadRequest()
     {
         // Arrange
-        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Put, new Dictionary<string, string> { { "Organization-Identifier", "org123" } }, string.Empty);
-        string id = "qr123";
+        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Post, new Dictionary<string, string> { { "Organization-Identifier", "org123" } }, string.Empty);
 
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);
 
         var body = await ((MockHttpResponseData)result).ReadAsStringAsync();
-        body.Should().Be(EndpointsBase.ParseBodySerializationError);
+        body.Should().Be(new OpenApiHeaderOrganizationIdentifierAttribute().ErrorMessage);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
@@ -183,11 +175,10 @@ public sealed class QrCodePutTests
             ImageUrl = "https://example.com/updated.png"
         };
 
-        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Put, new Dictionary<string, string> { { "Wrong-Header", "org123" } }, validRequest);
-        string id = "qr123";
+        var req = HttpRequestDataHelper.CreateWithJsonBody(HttpMethod.Post, new Dictionary<string, string> { { "Wrong-Header", "org123" } }, validRequest);
 
         // Act
-        var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
+        var result = await _endpoint.RunAsync(req, It.IsAny<CancellationToken>());
 
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.BadRequest);

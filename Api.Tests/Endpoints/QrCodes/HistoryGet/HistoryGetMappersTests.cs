@@ -1,5 +1,4 @@
 ﻿using DynamicQR.Api.Endpoints.QrCodes.HistoryGet;
-using DynamicQR.Api.Mappers;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCodeHistory.Response;
@@ -42,7 +41,7 @@ public sealed class HistoryGetMappersTests
         };
 
         // Act
-        var result = response.ToContract();
+        var result = Mapper.ToContract(response);
 
         // Assert
         result.Should().NotBeNull();

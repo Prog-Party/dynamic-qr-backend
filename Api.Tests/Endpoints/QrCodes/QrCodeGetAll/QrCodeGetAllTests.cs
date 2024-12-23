@@ -1,8 +1,7 @@
-using Api.Tests.Endpoints.QrCodes.Mocks;
+using Api.Tests.Endpoints.Mocks;
 using Api.Tests.Utility;
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll;
-using DynamicQR.Api.Mappers;
 using DynamicQR.Application.QrCodes.Queries.GetAllQrCodes;
 using FluentAssertions;
 using MediatR;
@@ -12,22 +11,23 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Net;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetAllQrCodes.Response;
+using QrCodeGetAllEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll.QrCodeGetAll;
 using Response = DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll.Response;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeGetAll;
 
 [ExcludeFromCodeCoverage]
 public class QrCodeGetAllTests
 {
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly Mock<ILogger<QrCodeGetAll>> _loggerMock;
+    private readonly Mock<ILogger<QrCodeGetAllEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
-    private readonly QrCodeGetAll _endpoint;
+    private readonly QrCodeGetAllEndpoint _endpoint;
 
     public QrCodeGetAllTests()
     {
         _mediatorMock = new Mock<IMediator>();
-        _loggerMock = new Mock<ILogger<QrCodeGetAll>>();
+        _loggerMock = new Mock<ILogger<QrCodeGetAllEndpoint>>();
 
         _loggerMock.Setup(x => x.Log(
                     LogLevel.Information,
@@ -39,7 +39,7 @@ public class QrCodeGetAllTests
 
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
-        _endpoint = new QrCodeGetAll(_mediatorMock.Object, _loggerFactoryMock.Object);
+        _endpoint = new QrCodeGetAllEndpoint(_mediatorMock.Object, _loggerFactoryMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
@@ -93,7 +93,9 @@ public class QrCodeGetAllTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<List<Response>>();
 
-        TestUtility.TestIfObjectsAreEqual(body, result.Select(x => x.ToContract()!).ToList());
+        TestUtility.TestIfObjectsAreEqual(body, result.Select(Mapper.ToContract)
+                                                      .Select(x => x!)
+                                                      .ToList());
     }
 
     [Fact]
@@ -120,6 +122,8 @@ public class QrCodeGetAllTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<List<Response>>();
 
-        TestUtility.TestIfObjectsAreEqual(body, result.Select(x => x.ToContract()!).ToList());
+        TestUtility.TestIfObjectsAreEqual(body, result.Select(Mapper.ToContract)
+                                                      .Select(x => x!)
+                                                      .ToList());
     }
 }

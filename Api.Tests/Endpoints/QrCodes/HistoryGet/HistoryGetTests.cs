@@ -1,4 +1,4 @@
-﻿using Api.Tests.Endpoints.QrCodes.Mocks;
+﻿using Api.Tests.Endpoints.Mocks;
 using Api.Tests.Utility;
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints.QrCodes.HistoryGet;
@@ -83,7 +83,7 @@ public sealed class HistoryGetTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<List<Response>>();
 
-        TestUtility.TestIfObjectsAreEqual(body, result.Select(x => x.ToContract()!).ToList());
+        TestUtility.TestIfObjectsAreEqual(body, result.Select(Mapper.ToContract).Select(x => x!).ToList());
     }
 
     [Fact]
@@ -125,6 +125,6 @@ public sealed class HistoryGetTests
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<List<Response>>();
 
-        TestUtility.TestIfObjectsAreEqual(body, result.Select(x => x.ToContract()!).ToList());
+        TestUtility.TestIfObjectsAreEqual(body, result.Select(Mapper.ToContract).Select(x => x!).ToList());
     }
 }

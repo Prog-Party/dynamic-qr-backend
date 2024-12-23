@@ -1,6 +1,5 @@
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Extensions;
-using DynamicQR.Api.Mappers;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -37,7 +36,10 @@ public sealed class QrCodeGetAll : EndpointsBase
 
         List<ApplicationResponse> coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        List<Response> qrCodeResponses = coreResponse?.Where(x => x != null).Select(x => x.ToContract()!)?.ToList() ?? new();
+        List<Response> qrCodeResponses = coreResponse?.Select(Mapper.ToContract)
+                                                      .Where(x => x != null)
+                                                      .Select(x => x!)
+                                                      .ToList() ?? new();
 
         return await CreateJsonResponse(req, qrCodeResponses);
     }

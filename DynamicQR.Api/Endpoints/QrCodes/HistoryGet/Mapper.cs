@@ -1,10 +1,10 @@
 ﻿namespace DynamicQR.Api.Endpoints.QrCodes.HistoryGet;
+using ApplicationResponse = Application.QrCodes.Queries.GetQrCodeHistory.Response;
 
-public static class Mapper
+internal static class Mapper
 {
-    public static Response? ToContract(this Application.QrCodes.Queries.GetQrCodeHistory.Response response)
-    {
-        return response is null ? null : new Response
+    internal static Response? ToContract(ApplicationResponse response)
+        => response is null ? null : new Response
         {
             QrCodeId = response.QrCodeId,
             Order = response.Order,
@@ -14,5 +14,4 @@ public static class Mapper
             Details = response.Details,
             EventType = response.EventType
         };
-    }
 }

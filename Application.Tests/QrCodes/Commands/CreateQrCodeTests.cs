@@ -13,13 +13,15 @@ public sealed class CreateQrCodeTests
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
+    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
     public CreateQrCodeTests()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
-        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeTargetRepositoryServiceMock.Object);
+        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
+        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeTargetRepositoryServiceMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
     }
 
     [Fact]
@@ -28,7 +30,7 @@ public sealed class CreateQrCodeTests
         // Arrange
         var command = new Command
         {
-            OrganisationId = "org456",
+            OrganizationId = "org456",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 300,
@@ -46,7 +48,7 @@ public sealed class CreateQrCodeTests
         result.Id.Should().NotBeNullOrEmpty();
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.CreateAsync(command.OrganisationId,
+            repo.CreateAsync(command.OrganizationId,
                 It.Is<QrCode>(qr =>
                     qr.Id == result.Id &&
                     qr.BackgroundColor == command.BackgroundColor &&
@@ -86,7 +88,7 @@ public sealed class CreateQrCodeTests
         // Arrange
         var command = new Command
         {
-            OrganisationId = "org456",
+            OrganizationId = "org456",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 300,
@@ -97,7 +99,7 @@ public sealed class CreateQrCodeTests
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.CreateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.CreateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException("Repository error"));
 
         // Act
@@ -107,7 +109,7 @@ public sealed class CreateQrCodeTests
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Repository error");
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.CreateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
+            repo.CreateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
             Times.Once);
 
         _qrCodeTargetRepositoryServiceMock.Verify(repo =>
@@ -121,7 +123,7 @@ public sealed class CreateQrCodeTests
         // Arrange
         var command = new Command
         {
-            OrganisationId = "org456",
+            OrganizationId = "org456",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 300,
@@ -142,7 +144,7 @@ public sealed class CreateQrCodeTests
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Target repository error");
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.CreateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
+            repo.CreateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
             Times.Once);
 
         _qrCodeTargetRepositoryServiceMock.Verify(repo =>
