@@ -13,19 +13,21 @@ namespace Application.Tests.QrCodes.Queries;
 public sealed class GetQrCodeTests
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
+    private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly RequestHandler _handler;
 
     public GetQrCodeTests()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
-        _handler = new RequestHandler(_qrCodeRepositoryServiceMock.Object);
+        _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
+        _handler = new RequestHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeTargetRepositoryServiceMock.Object);
     }
 
     [Fact]
     public void Constructor_NullQrCodeRepositoryService_ShouldThrowArgumentNullException()
     {
         // Act
-        Action act = () => new RequestHandler(null!);
+        Action act = () => new RequestHandler(null!, null!);
 
         // Assert
         act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'qrCodeRepositoryService')");
@@ -52,15 +54,25 @@ public sealed class GetQrCodeTests
             IncludeMargin = true
         };
 
+        var qrCodeValue = new QrCodeTarget
+        {
+            Value = "value"
+        };
+
         _qrCodeRepositoryServiceMock
             .Setup(service => service.ReadAsync(request.OrganizationId, request.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(qrCode);
+
+        _qrCodeTargetRepositoryServiceMock
+            .Setup(service => service.ReadAsync(request.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(qrCodeValue);
 
         // Act
         var response = await _handler.Handle(request, CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
+        response.Value.Should().Be(qrCodeValue.Value);
         response.Id.Should().Be(qrCode.Id);
         response.BackgroundColor.Should().Be(qrCode.BackgroundColor);
         response.ForegroundColor.Should().Be(qrCode.ForegroundColor);
