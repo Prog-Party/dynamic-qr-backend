@@ -71,7 +71,6 @@ public sealed class HistoryGetTests
         {
         };
 
-
         _mediatorMock
             .Setup(m => m.Send(It.IsAny<ApplicationRequest>(), default))
             .ReturnsAsync(result);
