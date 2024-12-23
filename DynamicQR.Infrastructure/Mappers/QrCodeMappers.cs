@@ -6,8 +6,7 @@ namespace DynamicQR.Infrastructure.Mappers;
 public static class QrCodeMappers
 {
     public static QrCode ToInfrastructure(this Domain.Models.QrCode qrCode, string organizationId)
-    {
-        return new QrCode
+        => new QrCode
         {
             BackgroundColor = ColorTranslator.ToHtml(qrCode.BackgroundColor),
             ForegroundColor = ColorTranslator.ToHtml(qrCode.ForegroundColor),
@@ -18,13 +17,11 @@ public static class QrCodeMappers
             PartitionKey = organizationId,
             RowKey = qrCode.Id
         };
-    }
 
     public static Domain.Models.QrCode ToCore(this QrCode qrCode)
-    {
-        return new Domain.Models.QrCode
+        => new Domain.Models.QrCode
         {
-            Id = qrCode.PartitionKey,
+            Id = qrCode.RowKey,
             IncludeMargin = qrCode.IncludeMargin,
             BackgroundColor = ColorTranslator.FromHtml(qrCode.BackgroundColor),
             ForegroundColor = ColorTranslator.FromHtml(qrCode.ForegroundColor),
@@ -32,5 +29,4 @@ public static class QrCodeMappers
             ImageHeight = qrCode.ImageHeight,
             ImageWidth = qrCode.ImageWidth,
         };
-    }
 }
