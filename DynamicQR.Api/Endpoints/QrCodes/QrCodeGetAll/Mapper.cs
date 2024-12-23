@@ -9,7 +9,6 @@ internal static class Mapper
         => response is null ? null : new Response
         {
             Id = response.Id,
-            Value = response.Value,
             BackgroundColor = ColorTranslator.ToHtml(response.BackgroundColor),
             ForegroundColor = ColorTranslator.ToHtml(response.ForegroundColor),
             ImageHeight = response.ImageHeight.GetValueOrDefault(),

@@ -11,12 +11,14 @@ namespace Application.Tests.QrCodes.Commands;
 public sealed class UpdateQrCodeTargetTests
 {
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
+    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
     public UpdateQrCodeTargetTests()
     {
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
-        _handler = new CommandHandler(_qrCodeTargetRepositoryServiceMock.Object);
+        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
+        _handler = new CommandHandler(_qrCodeTargetRepositoryServiceMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
     }
 
     [Fact]

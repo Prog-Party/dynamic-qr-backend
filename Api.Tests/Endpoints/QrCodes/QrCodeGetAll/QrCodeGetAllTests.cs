@@ -70,13 +70,11 @@ public class QrCodeGetAllTests
         {
             new ApplicationResponse {
                 Id = "1",
-                Value = "Value1",
                 BackgroundColor = Color.FromArgb(255, 255, 255),
                 ForegroundColor = Color.FromArgb(255, 255, 255)
             },
             new ApplicationResponse {
                 Id = "2",
-                Value = "Value2",
                 BackgroundColor = Color.FromArgb(255, 255, 255),
                 ForegroundColor = Color.FromArgb(255, 255, 255)
             }

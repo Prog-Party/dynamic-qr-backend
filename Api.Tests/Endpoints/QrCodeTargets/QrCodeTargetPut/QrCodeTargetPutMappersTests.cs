@@ -14,9 +14,11 @@ public sealed class QrCodeTargetPutMappersTests
         // Arrange
         Request? request = null;
         string id = "qr123";
+        string organizationId = "org123";
+        string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request!, id);
+        var result = Mapper.ToCore(request!, id, organizationId, customerId);
 
         // Assert
         result.Should().BeNull();
@@ -31,13 +33,17 @@ public sealed class QrCodeTargetPutMappersTests
             Value = "NewValue"
         };
         string id = "qr123";
+        string organizationId = "org123";
+        string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request, id);
+        var result = Mapper.ToCore(request, id, organizationId, customerId);
 
         // Assert
         result.Should().NotBeNull();
         result!.Id.Should().Be(id);
+        result.OrganizationId.Should().Be(organizationId);
+        result.CustomerId.Should().Be(customerId);
         result.Value.Should().Be(request.Value);
     }
 

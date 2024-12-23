@@ -29,7 +29,6 @@ public sealed class QrCodeGetAllMappersTests
         var response = new ApplicationResponse
         {
             Id = "123",
-            Value = "NewValue",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 100,
@@ -44,7 +43,6 @@ public sealed class QrCodeGetAllMappersTests
         // Assert
         result.Should().NotBeNull();
         result!.Id.Should().Be(response.Id);
-        result.Value.Should().Be(response.Value);
         result.BackgroundColor.Should().Be(ColorTranslator.ToHtml(response.BackgroundColor));
         result.ForegroundColor.Should().Be(ColorTranslator.ToHtml(response.ForegroundColor));
         result.ImageHeight.Should().Be(response.ImageHeight.GetValueOrDefault());
