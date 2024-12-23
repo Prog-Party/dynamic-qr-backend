@@ -22,8 +22,8 @@ public sealed class HistoryGet : EndpointsBase
     [OpenApiOperation(nameof(HistoryGet), Tags.QrCode,
        Summary = "Retrieve the history of a specific QR code.")
     ]
-    [OpenApiPathIdentifier]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiPathIdentifier]
     [OpenApiJsonResponse(typeof(List<Response>), Description = "The retrieved history items for the QR code")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No history found for the given QR code identifier. Or Missing organization identifier header.")]
     public async Task<HttpResponseData> RunAsync(

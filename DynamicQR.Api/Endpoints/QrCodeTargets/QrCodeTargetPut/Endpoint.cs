@@ -23,9 +23,9 @@ public sealed class QrCodeTargetPut : EndpointsBase
     [OpenApiOperation(nameof(QrCodeTargetPut), Tags.QrCodeTarget,
        Summary = "Update a certain qr code target.")
     ]
-    [OpenApiPathIdentifier]
     [OpenApiHeaderOrganizationIdentifier]
     [OpenApiHeaderCustomerIdentifier]
+    [OpenApiPathIdentifier]
     [OpenApiJsonPayload(typeof(Request))]
     [OpenApiJsonResponse(typeof(Response), Description = "Update a certain qr code target")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Request couldn't be parsed. Or missing organization identifier header. Or missing customer identifier header.")]

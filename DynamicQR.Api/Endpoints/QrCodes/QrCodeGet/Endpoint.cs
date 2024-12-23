@@ -24,8 +24,8 @@ public sealed class QrCodeGet : EndpointsBase
     [OpenApiOperation(nameof(QrCodeGet), Tags.QrCode,
        Summary = "Retrieve a certain qr code.")
     ]
-    [OpenApiPathIdentifier]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiPathIdentifier]
     [OpenApiJsonResponse(typeof(Response), Description = "The retrieved qr code by its identifier")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No qr code found with the given identifier. Or Missing organization identifier header")]
     public async Task<HttpResponseData> RunAsync(
