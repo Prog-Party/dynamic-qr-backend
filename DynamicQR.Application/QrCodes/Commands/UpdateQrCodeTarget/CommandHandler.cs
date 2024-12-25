@@ -56,7 +56,7 @@ public class CommandHandler : IRequestHandler<Command, Response>
             QrCodeId = command.Id,
             CustomerId = command.CustomerId,
             OrganizationId = command.OrganizationId,
-            EventType = QrCodeEvents.Lifecycle.Updated,
+            EventType = QrCodeEvents.Lifecycle.UpdatedTarget,
             Details = details
         };
 
