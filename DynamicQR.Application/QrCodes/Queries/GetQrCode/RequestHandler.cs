@@ -9,10 +9,10 @@ public class RequestHandler : IRequestHandler<Request, Response>
     private readonly IQrCodeTargetRepositoryService _qrCodeTargetRepositoryService;
 
     /// <summary>
-    /// 
+    /// The constructor
     /// </summary>
-    /// <param name="qrCodeRepositoryService"></param>
-    /// <param name="qrCodeTargetRepositoryService"></param>
+    /// <param name="qrCodeRepositoryService">The repository for manipulating QR codes</param>
+    /// <param name="qrCodeTargetRepositoryService">The repository for manipulating the QR code targets</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="qrCodeRepositoryService"/> or <paramref name="qrCodeTargetRepositoryService"/> is null.</exception>
     public RequestHandler(IQrCodeRepositoryService qrCodeRepositoryService, IQrCodeTargetRepositoryService qrCodeTargetRepositoryService)
     {
@@ -21,10 +21,10 @@ public class RequestHandler : IRequestHandler<Request, Response>
     }
 
     /// <summary>
-    /// 
+    /// Retrieving the QR code
     /// </summary>
-    /// <param name="request"></param>
-    /// <param name="cancellationToken"></param>
+    /// <param name="request">The request handler</param>
+    /// <param name="cancellationToken">The cancellation token</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="request"/> is null.</exception>
     /// <exception cref="Azure.RequestFailedException"></exception>
     /// <returns></returns>
