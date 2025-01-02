@@ -16,5 +16,4 @@ internal static class Mapper
             ImageWidth = response.ImageWidth.GetValueOrDefault(),
             IncludeMargin = response.IncludeMargin,
         };
-
 }
