@@ -4,7 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Text.Json;
 
-namespace Api.Tests.Endpoints.QrCodes.Mocks;
+namespace Api.Tests.Endpoints.Mocks;
 
 [ExcludeFromCodeCoverage]
 public class MockHttpResponseData : HttpResponseData

@@ -1,6 +1,5 @@
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Extensions;
-using DynamicQR.Api.Mappers;
 using MediatR;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -8,6 +7,8 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using ApplicationRequest = DynamicQR.Application.QrCodes.Queries.GetQrCode.Request;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCode.Response;
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
 
@@ -23,8 +24,8 @@ public sealed class QrCodeGet : EndpointsBase
     [OpenApiOperation(nameof(QrCodeGet), Tags.QrCode,
        Summary = "Retrieve a certain qr code.")
     ]
-    [OpenApiPathIdentifier]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiPathIdentifier]
     [OpenApiJsonResponse(typeof(Response), Description = "The retrieved qr code by its identifier")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No qr code found with the given identifier. Or Missing organization identifier header")]
     public async Task<HttpResponseData> RunAsync(
@@ -34,11 +35,11 @@ public sealed class QrCodeGet : EndpointsBase
     {
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
 
-        Application.QrCodes.Queries.GetQrCode.Request coreRequest = new() { Id = id, OrganizationId = organizationId };
+        ApplicationRequest coreRequest = new() { Id = id, OrganizationId = organizationId };
 
-        Application.QrCodes.Queries.GetQrCode.Response coreResponse = await _mediator.Send(coreRequest, cancellationToken);
+        ApplicationResponse coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        Response? qrCodeResponse = coreResponse.ToContract();
+        Response? qrCodeResponse = Mapper.ToContract(coreResponse);
 
         if (qrCodeResponse == null)
             return await CreateResponse(req, HttpStatusCode.BadRequest, BadRequestNoQrCodeFoundMessage);

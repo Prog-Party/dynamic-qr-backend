@@ -9,6 +9,7 @@ using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Net;
+using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command;
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete;
 
@@ -16,15 +17,17 @@ public sealed class QrCodeDelete : EndpointsBase
 {
     public QrCodeDelete(IMediator mediator, ILoggerFactory loggerFactory) :
         base(mediator, loggerFactory.CreateLogger<QrCodeDelete>())
-    { }
+    {
+    }
 
     [Function(nameof(QrCodeDelete))]
     [OpenApiOperation(nameof(QrCodeDelete), Tags.QrCode,
        Summary = "Delete a specific new qr code.")
     ]
     [OpenApiHeaderOrganizationIdentifier]
+    [OpenApiHeaderCustomerIdentifier]
     [OpenApiPathIdentifier]
-    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header")]
+    [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header. Or missing customer identifier header.")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway)]
     [OpenApiResponseWithoutBody(HttpStatusCode.NotFound)]
     [OpenApiResponseWithoutBody(HttpStatusCode.NoContent)]
@@ -33,10 +36,16 @@ public sealed class QrCodeDelete : EndpointsBase
         CancellationToken cancellationToken)
     {
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
+        string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
 
         _logger.LogInformation($"{typeof(QrCodeDelete).FullName}.triggered");
 
-        Application.QrCodes.Commands.DeleteQrCode.Command coreCommand = new() { Id = id, OrganisationId = organizationId };
+        ApplicationCommand coreCommand = new()
+        {
+            Id = id,
+            OrganizationId = organizationId,
+            CustomerId = customerId
+        };
 
         try
         {

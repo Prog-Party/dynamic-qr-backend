@@ -1,4 +1,4 @@
-﻿using Api.Tests.Endpoints.QrCodes.Mocks;
+﻿using Api.Tests.Endpoints.Mocks;
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints;
 using DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
@@ -8,20 +8,23 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
+using QrCodePutEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodePut.QrCodePut;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodePut;
 
 [ExcludeFromCodeCoverage]
 public sealed class QrCodePutTests
 {
-    private readonly Mock<ILogger<QrCodePut>> _loggerMock;
+    private readonly Mock<ILogger<QrCodePutEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly QrCodePut _endpoint;
+    private readonly QrCodePutEndpoint _endpoint;
 
     public QrCodePutTests()
     {
-        _loggerMock = new Mock<ILogger<QrCodePut>>();
+        _loggerMock = new Mock<ILogger<QrCodePutEndpoint>>();
         _loggerMock.Setup(x => x.Log(
                     LogLevel.Information,
                     It.IsAny<EventId>(),
@@ -34,7 +37,7 @@ public sealed class QrCodePutTests
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
 
-        _endpoint = new QrCodePut(_mediatorMock.Object, _loggerFactoryMock.Object);
+        _endpoint = new QrCodePutEndpoint(_mediatorMock.Object, _loggerFactoryMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
@@ -87,7 +90,7 @@ public sealed class QrCodePutTests
             ImageUrl = "https://example.com/updated.png"
         };
 
-        var expectedCoreResponse = new DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response
+        var expectedCoreResponse = new ApplicationResponse
         {
             Id = "qr123"
         };
@@ -98,7 +101,7 @@ public sealed class QrCodePutTests
         }, validRequest);
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedCoreResponse);
 
         string id = "qr123";
@@ -113,7 +116,7 @@ public sealed class QrCodePutTests
         responseBody.Should().NotBeNull();
         responseBody!.Id.Should().Be(expectedCoreResponse.Id);
 
-        _mediatorMock.Verify(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -136,7 +139,7 @@ public sealed class QrCodePutTests
         }, validRequest);
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Microsoft.Azure.Storage.StorageException());
 
         string id = "qr123";

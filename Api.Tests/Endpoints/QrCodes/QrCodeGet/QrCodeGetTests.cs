@@ -1,4 +1,4 @@
-﻿using Api.Tests.Endpoints.QrCodes.Mocks;
+﻿using Api.Tests.Endpoints.Mocks;
 using Api.Tests.Utility;
 using DynamicQR.Api.Attributes;
 using DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
@@ -9,20 +9,23 @@ using Moq;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Net;
+using ApplicationRequest = DynamicQR.Application.QrCodes.Queries.GetQrCode.Request;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCode.Response;
+using QrCodeGetEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeGet.QrCodeGet;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeGet;
 
 [ExcludeFromCodeCoverage]
 public sealed class QrCodeGetTests
 {
-    private readonly Mock<ILogger<QrCodeGet>> _loggerMock;
+    private readonly Mock<ILogger<QrCodeGetEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly QrCodeGet _endpoint;
+    private readonly QrCodeGetEndpoint _endpoint;
 
     public QrCodeGetTests()
     {
-        _loggerMock = new Mock<ILogger<QrCodeGet>>();
+        _loggerMock = new Mock<ILogger<QrCodeGetEndpoint>>();
         _loggerMock.Setup(x => x.Log(
                     LogLevel.Information,
                     It.IsAny<EventId>(),
@@ -35,7 +38,7 @@ public sealed class QrCodeGetTests
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
 
-        _endpoint = new QrCodeGet(_mediatorMock.Object, _loggerFactoryMock.Object);
+        _endpoint = new QrCodeGetEndpoint(_mediatorMock.Object, _loggerFactoryMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
@@ -65,8 +68,8 @@ public sealed class QrCodeGetTests
         string id = "test-id";
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Queries.GetQrCode.Request>(), default))
-            .ReturnsAsync((DynamicQR.Application.QrCodes.Queries.GetQrCode.Response)null!);
+            .Setup(m => m.Send(It.IsAny<ApplicationRequest>(), default))
+            .ReturnsAsync((ApplicationResponse)null!);
 
         // Act
         var response = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
@@ -87,7 +90,7 @@ public sealed class QrCodeGetTests
         });
         string id = "test-id";
 
-        var qrCodeResponse = new DynamicQR.Api.Endpoints.QrCodes.QrCodeGet.Response
+        var qrCodeResponse = new Response
         {
             IncludeMargin = true,
             BackgroundColor = "#FFFFFF",
@@ -98,8 +101,8 @@ public sealed class QrCodeGetTests
         };
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Queries.GetQrCode.Request>(), default))
-            .ReturnsAsync(new DynamicQR.Application.QrCodes.Queries.GetQrCode.Response
+            .Setup(m => m.Send(It.IsAny<ApplicationRequest>(), default))
+            .ReturnsAsync(new ApplicationResponse
             {
                 IncludeMargin = true,
                 BackgroundColor = ColorTranslator.FromHtml("#FFFFFF"),

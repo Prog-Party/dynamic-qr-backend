@@ -5,5 +5,7 @@ namespace DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget;
 public sealed record Command : IRequest<Response>
 {
     public string Id { get; init; } = string.Empty;
+    public string OrganizationId { get; init; } = string.Empty;
+    public string CustomerId { get; init; } = string.Empty;
     public string Value { get; init; } = string.Empty;
 }

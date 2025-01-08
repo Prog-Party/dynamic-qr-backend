@@ -1,12 +1,12 @@
-﻿using Moq;
+﻿using Azure.Core.Serialization;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
-using Azure.Core.Serialization;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Newtonsoft.Json;
 using System.Text;
 
-namespace Api.Tests.Endpoints.QrCodes.Mocks;
+namespace Api.Tests.Endpoints.Mocks;
 
 // Helper class for creating HttpRequestData for testing
 internal class HttpRequestDataHelper

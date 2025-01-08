@@ -1,6 +1,5 @@
-﻿using Api.Tests.Endpoints.QrCodes.Mocks;
+﻿using Api.Tests.Endpoints.Mocks;
 using DynamicQR.Api.Attributes;
-using DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete;
 using DynamicQR.Domain.Exceptions;
 using FluentAssertions;
 using MediatR;
@@ -8,20 +7,22 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command;
+using QrCodeDeleteEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete.QrCodeDelete;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeDelete;
 
 [ExcludeFromCodeCoverage]
 public sealed class QrCodeDeleteTests
 {
-    private readonly Mock<ILogger<QrCodeDelete>> _loggerMock;
+    private readonly Mock<ILogger<QrCodeDeleteEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
-    private readonly QrCodeDelete _endpoint;
+    private readonly QrCodeDeleteEndpoint _endpoint;
 
     public QrCodeDeleteTests()
     {
-        _loggerMock = new Mock<ILogger<QrCodeDelete>>();
+        _loggerMock = new Mock<ILogger<QrCodeDeleteEndpoint>>();
         _loggerMock.Setup(x => x.Log(
                     LogLevel.Information,
                     It.IsAny<EventId>(),
@@ -34,7 +35,7 @@ public sealed class QrCodeDeleteTests
         _loggerFactoryMock = new Mock<ILoggerFactory>();
         _loggerFactoryMock.Setup(x => x.CreateLogger(It.IsAny<string>())).Returns(() => _loggerMock.Object);
 
-        _endpoint = new QrCodeDelete(_mediatorMock.Object, _loggerFactoryMock.Object);
+        _endpoint = new QrCodeDeleteEndpoint(_mediatorMock.Object, _loggerFactoryMock.Object);
     }
 
     [Fact(Skip = "Skip this test until middleware is added to the tests")]
@@ -65,7 +66,7 @@ public sealed class QrCodeDeleteTests
         string id = "qr123";
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .Returns(Unit.Task);
 
         // Act
@@ -74,8 +75,8 @@ public sealed class QrCodeDeleteTests
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.NoContent);
 
-        _mediatorMock.Verify(m => m.Send(It.Is<DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command>(cmd =>
-            cmd.Id == id && cmd.OrganisationId == "org-123"), It.IsAny<CancellationToken>()), Times.Once);
+        _mediatorMock.Verify(m => m.Send(It.Is<ApplicationCommand>(cmd =>
+            cmd.Id == id && cmd.OrganizationId == "org-123"), It.IsAny<CancellationToken>()), Times.Once);
     }
 
     [Fact]
@@ -89,7 +90,7 @@ public sealed class QrCodeDeleteTests
         string id = "qr123";
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Microsoft.Azure.Storage.StorageException());
 
         // Act
@@ -110,7 +111,7 @@ public sealed class QrCodeDeleteTests
         string id = "qr123";
 
         _mediatorMock
-            .Setup(m => m.Send(It.IsAny<DynamicQR.Application.QrCodes.Commands.DeleteQrCode.Command>(), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new QrCodeNotFoundException("org-123", id, null));
 
         // Act

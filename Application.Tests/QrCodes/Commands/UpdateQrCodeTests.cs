@@ -12,12 +12,14 @@ namespace Application.Tests.QrCodes.Commands;
 public sealed class UpdateQrCodeTests
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
+    private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
     public UpdateQrCodeTests()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
-        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object);
+        _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
+        _handler = new CommandHandler(_qrCodeRepositoryServiceMock.Object, _qrCodeHistoryRepositoryServiceMock.Object);
     }
 
     [Fact]
@@ -27,7 +29,7 @@ public sealed class UpdateQrCodeTests
         var command = new Command
         {
             Id = "qr123",
-            OrganisationId = "org456",
+            OrganizationId = "org456",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 300,
@@ -37,7 +39,7 @@ public sealed class UpdateQrCodeTests
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.UpdateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.UpdateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
             .Returns(Task.CompletedTask);
 
         // Act
@@ -48,7 +50,7 @@ public sealed class UpdateQrCodeTests
         result.Id.Should().Be(command.Id);
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.UpdateAsync(command.OrganisationId,
+            repo.UpdateAsync(command.OrganizationId,
                 It.Is<QrCode>(qr =>
                     qr.Id == command.Id &&
                     qr.BackgroundColor == command.BackgroundColor &&
@@ -81,7 +83,7 @@ public sealed class UpdateQrCodeTests
         var command = new Command
         {
             Id = "qr123",
-            OrganisationId = "org456",
+            OrganizationId = "org456",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 300,
@@ -91,7 +93,7 @@ public sealed class UpdateQrCodeTests
         };
 
         _qrCodeRepositoryServiceMock
-            .Setup(repo => repo.UpdateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
+            .Setup(repo => repo.UpdateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new InvalidOperationException("Repository exception"));
 
         // Act
@@ -101,7 +103,7 @@ public sealed class UpdateQrCodeTests
         await act.Should().ThrowAsync<InvalidOperationException>().WithMessage("Repository exception");
 
         _qrCodeRepositoryServiceMock.Verify(repo =>
-            repo.UpdateAsync(command.OrganisationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
+            repo.UpdateAsync(command.OrganizationId, It.IsAny<QrCode>(), It.IsAny<CancellationToken>()),
             Times.Once);
     }
 }

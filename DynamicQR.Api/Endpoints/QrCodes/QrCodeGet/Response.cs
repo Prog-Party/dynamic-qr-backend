@@ -2,6 +2,7 @@
 
 public sealed record Response
 {
+    public string Value { get; init; } = string.Empty;
     public bool IncludeMargin { get; init; }
     public string BackgroundColor { get; init; } = "#FFF";
     public string ForegroundColor { get; init; } = "#000";
