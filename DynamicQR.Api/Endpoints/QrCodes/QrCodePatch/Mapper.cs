@@ -2,11 +2,11 @@
 using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
 
-namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePatch;
 
 internal static class Mapper
 {
-    internal static ApplicationCommand? ToCore(this QrCodePutRequest request, string id, string organizationId, string customerId)
+    internal static ApplicationCommand? ToCore(this QrCodePatchRequest request, string id, string organizationId, string customerId)
         => request is null ? null : new ApplicationCommand
         {
             BackgroundColor = ColorTranslator.FromHtml(request.BackgroundColor),
@@ -20,8 +20,8 @@ internal static class Mapper
             CustomerId = customerId
         };
 
-    internal static QrCodePutResponse? ToContract(this ApplicationResponse response)
-        => response is null ? null : new QrCodePutResponse
+    internal static QrCodePatchResponse? ToContract(this ApplicationResponse response)
+        => response is null ? null : new QrCodePatchResponse
         {
             Id = response.Id,
         };

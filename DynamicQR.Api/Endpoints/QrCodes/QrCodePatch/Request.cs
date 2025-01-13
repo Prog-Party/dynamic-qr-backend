@@ -1,6 +1,6 @@
-namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePatch;
 
-public sealed record QrCodePutRequest
+public sealed record QrCodePatchRequest
 {
     public bool IncludeMargin { get; init; }
     public string BackgroundColor { get; init; } = "#FFF";

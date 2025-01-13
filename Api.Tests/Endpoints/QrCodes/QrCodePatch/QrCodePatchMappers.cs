@@ -1,25 +1,25 @@
-﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
+﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodePatch;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodePatch;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePutMappers
+public sealed class QrCodePatchMappers
 {
     [Fact]
     public void ToCore_QrCodePut_NullRequest_ReturnsNull()
     {
         // Arrange
-        QrCodePutRequest? request = null;
+        QrCodePatchRequest? request = null;
         string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request!, id, organizationId, customerId);
+        var result = request!.ToCore(id, organizationId, customerId);
 
         // Assert
         result.Should().BeNull();
@@ -29,7 +29,7 @@ public sealed class QrCodePutMappers
     public void ToCore_QrCodePut_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new QrCodePutRequest
+        var request = new QrCodePatchRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",
@@ -44,7 +44,7 @@ public sealed class QrCodePutMappers
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request, id, organizationId, customerId);
+        var result = request.ToCore(id, organizationId, customerId);
 
         // Assert
         result.Should().NotBeNull();
@@ -66,7 +66,7 @@ public sealed class QrCodePutMappers
         ApplicationResponse? response = null;
 
         // Act
-        var result = Mapper.ToContract(response!);
+        var result = response!.ToContract();
 
         // Assert
         result.Should().BeNull();
@@ -82,7 +82,7 @@ public sealed class QrCodePutMappers
         };
 
         // Act
-        var result = Mapper.ToContract(response);
+        var result = response.ToContract();
 
         // Assert
         result.Should().NotBeNull();
