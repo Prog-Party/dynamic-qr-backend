@@ -33,7 +33,7 @@ jobs:
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
           dotnet restore
-          dotnet build --configuration Release --no-restore --output ./output
+          dotnet build "DynamicQR.Api/DynamicQR.Api.csproj" --configuration Release --no-restore --output ./output
           popd
       
       - name: Login to Azure
