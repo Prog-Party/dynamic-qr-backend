@@ -11,24 +11,24 @@ using System.Net;
 using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Command;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
 
-namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePatch;
 
-public sealed class QrCodePut : EndpointsBase
+public sealed class QrCodePatch : EndpointsBase
 {
-    public QrCodePut(IMediator mediator, ILoggerFactory loggerFactory) :
-        base(mediator, loggerFactory.CreateLogger<QrCodePut>())
+    public QrCodePatch(IMediator mediator, ILoggerFactory loggerFactory) :
+        base(mediator, loggerFactory.CreateLogger<QrCodePatch>())
     {
     }
 
-    [Function(nameof(QrCodePut))]
-    [OpenApiOperation(nameof(QrCodePut), Tags.QrCode,
+    [Function(nameof(QrCodePatch))]
+    [OpenApiOperation(nameof(QrCodePatch), Tags.QrCode,
        Summary = "Update a certain qr code.")
     ]
     [OpenApiHeaderOrganizationIdentifier]
     [OpenApiHeaderCustomerIdentifier]
     [OpenApiPathIdentifier]
-    [OpenApiJsonPayload(typeof(QrCodePutRequest))]
-    [OpenApiJsonResponse(typeof(QrCodePutResponse), Description = "Update a certain qr code")]
+    [OpenApiJsonPayload(typeof(QrCodePatchRequest))]
+    [OpenApiJsonResponse(typeof(QrCodePatchResponse), Description = "Update a certain qr code")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No qr code found with the given identifier. Or missing organization identifier header. Or missing customer identifier header.")]
     public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-codes/{id}")] HttpRequestData req,
         string id,
@@ -37,10 +37,10 @@ public sealed class QrCodePut : EndpointsBase
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
         string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
 
-        var request = await ParseBody<QrCodePutRequest>(req);
+        var request = await ParseBody<QrCodePatchRequest>(req);
         if (request.Error != null) return request.Error;
 
-        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, id, organizationId, customerId);
+        ApplicationCommand? coreCommand = request.Result.ToCore(id, organizationId, customerId);
 
         ApplicationResponse coreResponse;
 
@@ -53,7 +53,7 @@ public sealed class QrCodePut : EndpointsBase
             return req.CreateResponse(HttpStatusCode.BadGateway);
         }
 
-        QrCodePutResponse? responseContent = Mapper.ToContract(coreResponse);
+        QrCodePatchResponse? responseContent = coreResponse.ToContract();
 
         return await CreateJsonResponse(req, responseContent);
     }
