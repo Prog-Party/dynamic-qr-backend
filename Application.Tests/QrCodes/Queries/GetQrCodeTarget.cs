@@ -9,12 +9,12 @@ using System.Diagnostics.CodeAnalysis;
 namespace Application.Tests.QrCodes.Queries;
 
 [ExcludeFromCodeCoverage]
-public sealed class GetQrCodeTargetTests
+public sealed class GetQrCodeTarget
 {
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly RequestHandler _handler;
 
-    public GetQrCodeTargetTests()
+    public GetQrCodeTarget()
     {
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
         _handler = new RequestHandler(_qrCodeTargetRepositoryServiceMock.Object);

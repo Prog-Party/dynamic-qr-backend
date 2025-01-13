@@ -6,7 +6,7 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeT
 namespace Api.Tests.Endpoints.QrCodes.QrCodeTargetPut;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeTargetPutMappersTests
+public sealed class QrCodeTargetPutMappers
 {
     [Fact]
     public void ToCore_QrCodeTarget_NullRequest_ReturnsNull()

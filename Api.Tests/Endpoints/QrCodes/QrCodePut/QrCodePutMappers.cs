@@ -1,49 +1,50 @@
-﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
+﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.CreateQrCode.Response;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
 
-namespace Api.Tests.Endpoints.QrCodes.QrCodePost;
+namespace Api.Tests.Endpoints.QrCodes;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePostMappersTests
+public sealed class QrCodePutMappers
 {
     [Fact]
-    public void ToCore_QrCodePost_NullRequest_ReturnsNull()
+    public void ToCore_QrCodePut_NullRequest_ReturnsNull()
     {
         // Arrange
-        QrCodePostRequest? request = null;
+        QrCodePutRequest? request = null;
+        string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request!, organizationId, customerId);
+        var result = Mapper.ToCore(request!, id, organizationId, customerId);
 
         // Assert
         result.Should().BeNull();
     }
 
     [Fact]
-    public void ToCore_QrCodePost_ValidRequest_MapsToCommand()
+    public void ToCore_QrCodePut_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new QrCodePostRequest
+        var request = new QrCodePutRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",
-            ImageHeight = 100,
-            ImageUrl = "https://example.com/image.png",
-            ImageWidth = 200,
-            IncludeMargin = true,
-            Value = "QRCodeValue"
+            ImageHeight = 150,
+            ImageUrl = "https://example.com/image_updated.png",
+            ImageWidth = 300,
+            IncludeMargin = false
         };
 
+        string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request, organizationId, customerId);
+        var result = Mapper.ToCore(request, id, organizationId, customerId);
 
         // Assert
         result.Should().NotBeNull();
@@ -53,14 +54,13 @@ public sealed class QrCodePostMappersTests
         result.ImageUrl.Should().Be(request.ImageUrl);
         result.ImageWidth.Should().Be(request.ImageWidth);
         result.IncludeMargin.Should().Be(request.IncludeMargin);
-        result.Value.Should().Be(request.Value);
+        result.Id.Should().Be(id);
         result.OrganizationId.Should().Be(organizationId);
         result.CustomerId.Should().Be(customerId);
     }
 
-
     [Fact]
-    public void ToContract_QrCodePost_NullResponse_ReturnsNull()
+    public void ToContract_QrCodePut_NullResponse_ReturnsNull()
     {
         // Arrange
         ApplicationResponse? response = null;
@@ -73,12 +73,12 @@ public sealed class QrCodePostMappersTests
     }
 
     [Fact]
-    public void ToContract_QrCodePost_ValidResponse_MapsToResponse()
+    public void ToContract_QrCodePut_ValidResponse_MapsToResponse()
     {
         // Arrange
         var response = new ApplicationResponse
         {
-            Id = "12345"
+            Id = "qr123"
         };
 
         // Act

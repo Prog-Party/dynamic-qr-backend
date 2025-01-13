@@ -1,19 +1,18 @@
-﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodePut;
+﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
-using System.Drawing;
-using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCode.Response;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Response;
 
-namespace Api.Tests.Endpoints.QrCodes;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeTargetPut;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePutMappersTests
+public sealed class QrCodeTargetPutMappers
 {
     [Fact]
-    public void ToCore_QrCodePut_NullRequest_ReturnsNull()
+    public void ToCore_QrCodeTarget_NullRequest_ReturnsNull()
     {
         // Arrange
-        QrCodePutRequest? request = null;
+        QrCodeTargetPutRequest? request = null;
         string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
@@ -26,19 +25,13 @@ public sealed class QrCodePutMappersTests
     }
 
     [Fact]
-    public void ToCore_QrCodePut_ValidRequest_MapsToCommand()
+    public void ToCore_QrCodeTarget_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new QrCodePutRequest
+        var request = new QrCodeTargetPutRequest
         {
-            BackgroundColor = "#FFFFFF",
-            ForegroundColor = "#000000",
-            ImageHeight = 150,
-            ImageUrl = "https://example.com/image_updated.png",
-            ImageWidth = 300,
-            IncludeMargin = false
+            Value = "NewValue"
         };
-
         string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
@@ -48,19 +41,14 @@ public sealed class QrCodePutMappersTests
 
         // Assert
         result.Should().NotBeNull();
-        result!.BackgroundColor.Should().Be(ColorTranslator.FromHtml(request.BackgroundColor));
-        result.ForegroundColor.Should().Be(ColorTranslator.FromHtml(request.ForegroundColor));
-        result.ImageHeight.Should().Be(request.ImageHeight);
-        result.ImageUrl.Should().Be(request.ImageUrl);
-        result.ImageWidth.Should().Be(request.ImageWidth);
-        result.IncludeMargin.Should().Be(request.IncludeMargin);
-        result.Id.Should().Be(id);
+        result!.Id.Should().Be(id);
         result.OrganizationId.Should().Be(organizationId);
         result.CustomerId.Should().Be(customerId);
+        result.Value.Should().Be(request.Value);
     }
 
     [Fact]
-    public void ToContract_QrCodePut_NullResponse_ReturnsNull()
+    public void ToContract_QrCodeTarget_NullResponse_ReturnsNull()
     {
         // Arrange
         ApplicationResponse? response = null;
@@ -73,7 +61,7 @@ public sealed class QrCodePutMappersTests
     }
 
     [Fact]
-    public void ToContract_QrCodePut_ValidResponse_MapsToResponse()
+    public void ToContract_QrCodeTarget_ValidResponse_MapsToResponse()
     {
         // Arrange
         var response = new ApplicationResponse

@@ -8,14 +8,14 @@ using System.Diagnostics.CodeAnalysis;
 namespace Application.Tests.QrCodes.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class DeleteQrCodeTests
+public sealed class DeleteQrCode
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
-    public DeleteQrCodeTests()
+    public DeleteQrCode()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();

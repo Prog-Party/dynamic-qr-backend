@@ -10,13 +10,13 @@ using System.Drawing;
 namespace Application.Tests.QrCodes.Queries;
 
 [ExcludeFromCodeCoverage]
-public sealed class GetQrCodeTests
+public sealed class GetQrCode
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly RequestHandler _handler;
 
-    public GetQrCodeTests()
+    public GetQrCode()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
