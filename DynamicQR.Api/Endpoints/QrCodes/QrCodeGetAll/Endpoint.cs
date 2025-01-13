@@ -23,7 +23,7 @@ public sealed class QrCodeGetAll : EndpointsBase
        Summary = "Retrieve all QR codes for a specific organization.")
     ]
     [OpenApiHeaderOrganizationIdentifier]
-    [OpenApiJsonResponse(typeof(List<Response>), Description = "The retrieved QR codes for the organization")]
+    [OpenApiJsonResponse(typeof(List<QrCodeGetAllResponse>), Description = "The retrieved QR codes for the organization")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Missing organization identifier header")]
     public async Task<HttpResponseData> RunAsync(
     [HttpTrigger(AuthorizationLevel.Function, "get", Route = "qr-codes")]
@@ -36,7 +36,7 @@ public sealed class QrCodeGetAll : EndpointsBase
 
         List<ApplicationResponse> coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        List<Response> qrCodeResponses = coreResponse?.Select(Mapper.ToContract)
+        List<QrCodeGetAllResponse> qrCodeResponses = coreResponse?.Select(Mapper.ToContract)
                                                       .Where(x => x != null)
                                                       .Select(x => x!)
                                                       .ToList() ?? new();

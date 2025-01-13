@@ -26,7 +26,7 @@ public sealed class QrCodeGet : EndpointsBase
     ]
     [OpenApiHeaderOrganizationIdentifier]
     [OpenApiPathIdentifier]
-    [OpenApiJsonResponse(typeof(Response), Description = "The retrieved qr code by its identifier")]
+    [OpenApiJsonResponse(typeof(QrCodeGetResponse), Description = "The retrieved qr code by its identifier")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No qr code found with the given identifier. Or Missing organization identifier header")]
     public async Task<HttpResponseData> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "qr-codes/{id}")] HttpRequestData req,
@@ -39,7 +39,7 @@ public sealed class QrCodeGet : EndpointsBase
 
         ApplicationResponse coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        Response? qrCodeResponse = Mapper.ToContract(coreResponse);
+        QrCodeGetResponse? qrCodeResponse = Mapper.ToContract(coreResponse);
 
         if (qrCodeResponse == null)
             return await CreateResponse(req, HttpStatusCode.BadRequest, BadRequestNoQrCodeFoundMessage);

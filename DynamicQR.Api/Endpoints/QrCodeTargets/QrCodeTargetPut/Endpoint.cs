@@ -26,8 +26,8 @@ public sealed class QrCodeTargetPut : EndpointsBase
     [OpenApiHeaderOrganizationIdentifier]
     [OpenApiHeaderCustomerIdentifier]
     [OpenApiPathIdentifier]
-    [OpenApiJsonPayload(typeof(Request))]
-    [OpenApiJsonResponse(typeof(Response), Description = "Update a certain qr code target")]
+    [OpenApiJsonPayload(typeof(QrCodeTargetPutRequest))]
+    [OpenApiJsonResponse(typeof(QrCodeTargetPutResponse), Description = "Update a certain qr code target")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Request couldn't be parsed. Or missing organization identifier header. Or missing customer identifier header.")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway, Description = "No qr code target found with the given identifier.")]
     public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-code-targets/{id}")] HttpRequestData req,
@@ -37,7 +37,7 @@ public sealed class QrCodeTargetPut : EndpointsBase
         string organizationId = req.GetHeaderAttribute<OpenApiHeaderOrganizationIdentifierAttribute>();
         string customerId = req.GetHeaderAttribute<OpenApiHeaderCustomerIdentifierAttribute>();
 
-        var request = await ParseBody<Request>(req);
+        var request = await ParseBody<QrCodeTargetPutRequest>(req);
         if (request.Error != null) return request.Error;
 
         ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, id, organizationId, customerId);
@@ -53,7 +53,7 @@ public sealed class QrCodeTargetPut : EndpointsBase
             return req.CreateResponse(HttpStatusCode.BadGateway);
         }
 
-        Response? responseContent = Mapper.ToContract(coreResponse);
+        QrCodeTargetPutResponse? responseContent = Mapper.ToContract(coreResponse);
 
         return await CreateJsonResponse(req, responseContent);
     }
