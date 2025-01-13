@@ -30,7 +30,7 @@ public sealed class QrCodePatch : EndpointsBase
     [OpenApiJsonPayload(typeof(QrCodePatchRequest))]
     [OpenApiJsonResponse(typeof(QrCodePatchResponse), Description = "Update a certain qr code")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No qr code found with the given identifier. Or missing organization identifier header. Or missing customer identifier header.")]
-    public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-codes/{id}")] HttpRequestData req,
+    public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "patch", Route = "qr-codes/{id}")] HttpRequestData req,
         string id,
         CancellationToken cancellationToken)
     {
