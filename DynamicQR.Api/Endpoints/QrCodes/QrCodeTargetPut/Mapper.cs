@@ -3,9 +3,9 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeT
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 
-internal static class Mapper
+public static class Mapper
 {
-    internal static ApplicationCommand? ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
+    public static ApplicationCommand? ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
         => request is null ? null : new ApplicationCommand
         {
             Id = id,

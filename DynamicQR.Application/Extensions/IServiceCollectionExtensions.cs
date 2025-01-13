@@ -11,11 +11,11 @@ public static class IServiceCollectionExtensions
     {
         Assembly[] assemblies =
         [
-            Assembly.GetAssembly(typeof(QrCodes.Commands.CreateQrCode.CommandHandler)),
-            Assembly.GetAssembly(typeof(QrCodes.Commands.UpdateQrCodeTarget.CommandHandler)),
-            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCode.RequestHandler)),
-            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCodeTarget.RequestHandler)),
-            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCodeHistory.RequestHandler))
+            Assembly.GetAssembly(typeof(QrCodes.Commands.CreateQrCode.CommandHandler))!,
+            Assembly.GetAssembly(typeof(QrCodes.Commands.UpdateQrCodeTarget.CommandHandler))!,
+            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCode.RequestHandler))!,
+            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCodeTarget.RequestHandler))!,
+            Assembly.GetAssembly(typeof(QrCodes.Queries.GetQrCodeHistory.RequestHandler))!
         ];
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));

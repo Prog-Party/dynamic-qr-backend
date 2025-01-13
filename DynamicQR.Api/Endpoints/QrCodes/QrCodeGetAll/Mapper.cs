@@ -3,9 +3,9 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetAllQrCodes.
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll;
 
-internal static class Mapper
+public static class Mapper
 {
-    internal static QrCodeGetAllResponse? ToContract(ApplicationResponse response)
+    public static QrCodeGetAllResponse? ToContract(ApplicationResponse response)
         => response is null ? null : new QrCodeGetAllResponse
         {
             Id = response.Id,
