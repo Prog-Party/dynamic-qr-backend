@@ -59,7 +59,7 @@ public sealed class QrCodeTargetPutTests
     [Fact]
     public async Task RunAsync_ShouldReturnBadGateway_WhenStorageExceptionIsThrown()
     {
-        Request validRequest = new()
+        QrCodeTargetPutRequest validRequest = new()
         {
             Value = "new value"
         };
@@ -89,7 +89,7 @@ public sealed class QrCodeTargetPutTests
         // Arrange
         var id = "123";
 
-        Request validRequest = new()
+        QrCodeTargetPutRequest validRequest = new()
         {
             Value = "new value"
         };
@@ -108,7 +108,7 @@ public sealed class QrCodeTargetPutTests
             .Setup(mediator => mediator.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(expectedResponse);
 
-        Response? contractResponse = Mapper.ToContract(expectedResponse);
+        QrCodeTargetPutResponse? contractResponse = Mapper.ToContract(expectedResponse);
 
         // Act
         var result = await _endpoint.RunAsync(req, id, It.IsAny<CancellationToken>());
@@ -116,7 +116,7 @@ public sealed class QrCodeTargetPutTests
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.OK);
 
-        var body = await ((MockHttpResponseData)result).ReadAsJsonAsync<Response>();
+        var body = await ((MockHttpResponseData)result).ReadAsJsonAsync<QrCodeTargetPutResponse>();
         body.Should().NotBeNull();
         body!.Id.Should().Be("123");
     }

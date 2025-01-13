@@ -13,7 +13,7 @@ public sealed class QrCodePutMappersTests
     public void ToCore_QrCodePut_NullRequest_ReturnsNull()
     {
         // Arrange
-        Request? request = null;
+        QrCodePutRequest? request = null;
         string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
@@ -29,7 +29,7 @@ public sealed class QrCodePutMappersTests
     public void ToCore_QrCodePut_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new Request
+        var request = new QrCodePutRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",

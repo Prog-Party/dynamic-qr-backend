@@ -77,7 +77,7 @@ public sealed class QrCodePostTest
     public async Task RunAsync_ValidRequest_ReturnsCreatedResponse()
     {
         // Arrange
-        var validRequest = new Request
+        var validRequest = new QrCodePostRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",
@@ -108,7 +108,7 @@ public sealed class QrCodePostTest
         // Assert
         result.StatusCode.Should().Be(HttpStatusCode.Created);
 
-        var responseBody = await ((MockHttpResponseData)result).ReadAsJsonAsync<Response>();
+        var responseBody = await ((MockHttpResponseData)result).ReadAsJsonAsync<QrCodePostResponse>();
         responseBody!.Id.Should().Be(expectedCoreResponse.Id);
 
         _mediatorMock.Verify(m => m.Send(It.IsAny<ApplicationCommand>(), It.IsAny<CancellationToken>()), Times.Once);
@@ -118,7 +118,7 @@ public sealed class QrCodePostTest
     public async Task RunAsync_StorageException_ReturnsBadGateway()
     {
         // Arrange
-        var validRequest = new Request
+        var validRequest = new QrCodePostRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",
@@ -165,7 +165,7 @@ public sealed class QrCodePostTest
     public async Task RunAsync_IncorrectHeaderName_ReturnsBadRequest()
     {
         // Arrange
-        var validRequest = new Request
+        var validRequest = new QrCodePostRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",

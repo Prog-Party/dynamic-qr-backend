@@ -24,7 +24,7 @@ public sealed class HistoryGet : EndpointsBase
     ]
     [OpenApiHeaderOrganizationIdentifier]
     [OpenApiPathIdentifier]
-    [OpenApiJsonResponse(typeof(List<Response>), Description = "The retrieved history items for the QR code")]
+    [OpenApiJsonResponse(typeof(List<HistoryGetResponse>), Description = "The retrieved history items for the QR code")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "No history found for the given QR code identifier. Or Missing organization identifier header.")]
     public async Task<HttpResponseData> RunAsync(
         [HttpTrigger(AuthorizationLevel.Function, "get", Route = "qr-codes/{id}/history")] HttpRequestData req,
@@ -37,7 +37,7 @@ public sealed class HistoryGet : EndpointsBase
 
         List<ApplicationResponse> coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        List<Response> historyResponses = coreResponse?.Select(Mapper.ToContract)
+        List<HistoryGetResponse> historyResponses = coreResponse?.Select(Mapper.ToContract)
                                                        .Where(x => x != null)
                                                        .Select(x => x!)
                                                        .ToList() ?? new();

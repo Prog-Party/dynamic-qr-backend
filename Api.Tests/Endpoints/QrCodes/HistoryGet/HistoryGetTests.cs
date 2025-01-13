@@ -11,7 +11,7 @@ using System.Net;
 using ApplicationRequest = DynamicQR.Application.QrCodes.Queries.GetQrCodeHistory.Request;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCodeHistory.Response;
 using HistoryGetEndpoint = DynamicQR.Api.Endpoints.QrCodes.HistoryGet.HistoryGet;
-using Response = DynamicQR.Api.Endpoints.QrCodes.HistoryGet.Response;
+using Response = DynamicQR.Api.Endpoints.QrCodes.HistoryGet.HistoryGetResponse;
 
 namespace Api.Tests.Endpoints.QrCodes.HistoryGet;
 
