@@ -6,8 +6,8 @@ namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
 
 internal static class Mapper
 {
-    internal static ApplicationCommand? ToCore(QrCodePostRequest request, string organizationId, string customerId)
-        => request is null ? null : new ApplicationCommand
+    internal static ApplicationCommand ToCore(QrCodePostRequest request, string organizationId, string customerId)
+        => request is null ? throw new ArgumentNullException(nameof(request)) : new ApplicationCommand
         {
             BackgroundColor = ColorTranslator.FromHtml(request.BackgroundColor),
             ForegroundColor = ColorTranslator.FromHtml(request.ForegroundColor),
@@ -20,8 +20,8 @@ internal static class Mapper
             CustomerId = customerId
         };
 
-    internal static QrCodePostResponse? ToContract(ApplicationResponse response)
-        => response is null ? null : new QrCodePostResponse
+    internal static QrCodePostResponse ToContract(ApplicationResponse response)
+        => response is null ? throw new ArgumentNullException(nameof(response)) : new QrCodePostResponse
         {
             Id = response.Id,
         };

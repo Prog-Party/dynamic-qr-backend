@@ -39,13 +39,13 @@ public sealed class QrCodePost : EndpointsBase
         var request = await ParseBody<QrCodePostRequest>(req);
         if (request.Error != null) return request.Error;
 
-        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, organizationId, customerId);
+        ApplicationCommand coreCommand = Mapper.ToCore(request.Result, organizationId, customerId);
 
         ApplicationResponse coreResponse;
 
         try
         {
-            coreResponse = await _mediator.Send(coreCommand!, cancellationToken);
+            coreResponse = await _mediator.Send(coreCommand, cancellationToken);
         }
         catch (StorageException)
         {

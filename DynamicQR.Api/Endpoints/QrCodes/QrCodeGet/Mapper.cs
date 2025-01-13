@@ -5,8 +5,8 @@ namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
 
 internal static class Mapper
 {
-    internal static QrCodeGetResponse? ToContract(ApplicationResponse response)
-        => response is null ? null : new QrCodeGetResponse
+    internal static QrCodeGetResponse ToContract(ApplicationResponse response)
+        => response is null ? throw new ArgumentNullException(nameof(response)) : new QrCodeGetResponse
         {
             Value = response.Value,
             BackgroundColor = ColorTranslator.ToHtml(response.BackgroundColor),

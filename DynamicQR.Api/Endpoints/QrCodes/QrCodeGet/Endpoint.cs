@@ -39,10 +39,15 @@ public sealed class QrCodeGet : EndpointsBase
 
         ApplicationResponse coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        QrCodeGetResponse? qrCodeResponse = Mapper.ToContract(coreResponse);
-
-        if (qrCodeResponse == null)
+        QrCodeGetResponse qrCodeResponse;
+        try
+        {
+            qrCodeResponse = Mapper.ToContract(coreResponse);
+        }
+        catch (ArgumentNullException)
+        {
             return await CreateResponse(req, HttpStatusCode.BadRequest, BadRequestNoQrCodeFoundMessage);
+        }
 
         return await CreateJsonResponse(req, qrCodeResponse);
     }

@@ -5,8 +5,8 @@ namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 
 internal static class Mapper
 {
-    internal static ApplicationCommand? ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
-        => request is null ? null : new ApplicationCommand
+    internal static ApplicationCommand ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
+        => request is null ? throw new ArgumentNullException(nameof(request)) : new ApplicationCommand
         {
             Id = id,
             OrganizationId = organizationId,
@@ -14,8 +14,8 @@ internal static class Mapper
             Value = request.Value
         };
 
-    public static QrCodeTargetPutResponse? ToContract(ApplicationResponse response)
-        => response is null ? null : new QrCodeTargetPutResponse
+    public static QrCodeTargetPutResponse ToContract(ApplicationResponse response)
+        => response is null ? throw new ArgumentNullException(nameof(response)) : new QrCodeTargetPutResponse
         {
             Id = response.Id,
         };

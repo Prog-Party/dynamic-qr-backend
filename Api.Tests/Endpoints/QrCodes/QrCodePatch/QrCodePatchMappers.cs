@@ -19,10 +19,7 @@ public sealed class QrCodePatchMappers
         string customerId = "cust123";
 
         // Act
-        var result = request!.ToCore(id, organizationId, customerId);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => request!.ToCore(id, organizationId, customerId));
     }
 
     [Fact]
@@ -66,10 +63,7 @@ public sealed class QrCodePatchMappers
         ApplicationResponse? response = null;
 
         // Act
-        var result = response!.ToContract();
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => response!.ToContract());
     }
 
     [Fact]

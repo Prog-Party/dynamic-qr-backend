@@ -40,13 +40,13 @@ public sealed class QrCodeTargetPut : EndpointsBase
         var request = await ParseBody<QrCodeTargetPutRequest>(req);
         if (request.Error != null) return request.Error;
 
-        ApplicationCommand? coreCommand = Mapper.ToCore(request.Result, id, organizationId, customerId);
+        ApplicationCommand coreCommand = Mapper.ToCore(request.Result, id, organizationId, customerId);
 
         ApplicationResponse coreResponse;
 
         try
         {
-            coreResponse = await _mediator.Send(coreCommand!, cancellationToken);
+            coreResponse = await _mediator.Send(coreCommand, cancellationToken);
         }
         catch (StorageException)
         {
