@@ -1,5 +1,5 @@
 ﻿using Api.Tests.Endpoints.Mocks;
-using DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut;
+using DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 using FluentAssertions;
 using MediatR;
 using Microsoft.Extensions.Logging;
@@ -8,9 +8,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Command;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Response;
-using QrCodeTargetPutEndpoint = DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut.QrCodeTargetPut;
+using QrCodeTargetPutEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut.QrCodeTargetPut;
 
-namespace Api.Tests.Endpoints.QrCodeTargets.QrCodeTargetPut;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeTargetPut;
 
 [ExcludeFromCodeCoverage]
 public sealed class QrCodeTargetPut

@@ -11,7 +11,7 @@ using System.Net;
 using ApplicationCommand = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Command;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Response;
 
-namespace DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 
 public sealed class QrCodeTargetPut : EndpointsBase
 {
@@ -30,7 +30,7 @@ public sealed class QrCodeTargetPut : EndpointsBase
     [OpenApiJsonResponse(typeof(QrCodeTargetPutResponse), Description = "Update a certain qr code target")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadRequest, Description = "Request couldn't be parsed. Or missing organization identifier header. Or missing customer identifier header.")]
     [OpenApiResponseWithoutBody(HttpStatusCode.BadGateway, Description = "No qr code target found with the given identifier.")]
-    public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-code-targets/{id}")] HttpRequestData req,
+    public async Task<HttpResponseData> RunAsync([HttpTrigger(AuthorizationLevel.Function, "put", Route = "qr-codes/{id}/target")] HttpRequestData req,
         string id,
         CancellationToken cancellationToken)
     {

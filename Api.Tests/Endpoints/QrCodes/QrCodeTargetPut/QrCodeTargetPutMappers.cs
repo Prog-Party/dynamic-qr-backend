@@ -1,9 +1,9 @@
-﻿using DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut;
+﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeTarget.Response;
 
-namespace Api.Tests.Endpoints.QrCodeTargets.QrCodeTargetPut;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeTargetPut;
 
 [ExcludeFromCodeCoverage]
 public sealed class QrCodeTargetPutMappers
