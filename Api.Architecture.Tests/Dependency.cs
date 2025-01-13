@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Api.Architecture.Tests;
 
-public sealed class DependencyTests
+public sealed class Dependency
 {
     private readonly Assembly apiAssembly = typeof(DynamicQR.Api.Endpoints.QrCodes.QrCodeGet.QrCodeGet).Assembly;
     private readonly Assembly coreAssembly = typeof(DynamicQR.Domain.Models.QrCode).Assembly;

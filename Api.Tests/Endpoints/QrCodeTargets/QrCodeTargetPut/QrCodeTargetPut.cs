@@ -13,14 +13,14 @@ using QrCodeTargetPutEndpoint = DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTarg
 namespace Api.Tests.Endpoints.QrCodeTargets.QrCodeTargetPut;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeTargetPutTests
+public sealed class QrCodeTargetPut
 {
     private readonly Mock<IMediator> _mediatorMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<ILogger<QrCodeTargetPutEndpoint>> _loggerMock;
     private readonly QrCodeTargetPutEndpoint _endpoint;
 
-    public QrCodeTargetPutTests()
+    public QrCodeTargetPut()
     {
         _mediatorMock = new Mock<IMediator>();
         _loggerFactoryMock = new Mock<ILoggerFactory>();

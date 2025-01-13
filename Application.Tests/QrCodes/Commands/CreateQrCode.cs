@@ -9,14 +9,14 @@ using System.Drawing;
 namespace Application.Tests.QrCodes.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class CreateQrCodeTests
+public sealed class CreateQrCode
 {
     private readonly Mock<IQrCodeRepositoryService> _qrCodeRepositoryServiceMock;
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
-    public CreateQrCodeTests()
+    public CreateQrCode()
     {
         _qrCodeRepositoryServiceMock = new Mock<IQrCodeRepositoryService>();
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();

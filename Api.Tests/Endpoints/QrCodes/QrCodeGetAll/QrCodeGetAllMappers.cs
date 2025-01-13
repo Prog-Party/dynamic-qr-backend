@@ -1,13 +1,13 @@
-﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
+﻿using DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll;
 using FluentAssertions;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCode.Response;
+using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetAllQrCodes.Response;
 
-namespace Api.Tests.Endpoints.QrCodes.QrCodeGetMappersTests;
+namespace Api.Tests.Endpoints.QrCodes.QrCodeGetAll;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeGetMappersTests
+public sealed class QrCodeGetAllMappers
 {
     [Fact]
     public void ToContract_QrCodeGet_NullResponse_ReturnsNull()
@@ -28,6 +28,7 @@ public sealed class QrCodeGetMappersTests
         // Arrange
         var response = new ApplicationResponse
         {
+            Id = "123",
             BackgroundColor = Color.White,
             ForegroundColor = Color.Black,
             ImageHeight = 100,
@@ -41,7 +42,8 @@ public sealed class QrCodeGetMappersTests
 
         // Assert
         result.Should().NotBeNull();
-        result!.BackgroundColor.Should().Be(ColorTranslator.ToHtml(response.BackgroundColor));
+        result!.Id.Should().Be(response.Id);
+        result.BackgroundColor.Should().Be(ColorTranslator.ToHtml(response.BackgroundColor));
         result.ForegroundColor.Should().Be(ColorTranslator.ToHtml(response.ForegroundColor));
         result.ImageHeight.Should().Be(response.ImageHeight.GetValueOrDefault());
         result.ImageUrl.Should().Be(response.ImageUrl);

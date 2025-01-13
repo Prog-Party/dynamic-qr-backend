@@ -6,7 +6,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Application.Tests.Extensions;
 
 [ExcludeFromCodeCoverage]
-public sealed class ObjectExtensionsTests
+public sealed class ObjectExtensions
 {
     [Fact]
     public void Primative_Type_To_Dictionary_Test()

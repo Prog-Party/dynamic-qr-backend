@@ -8,13 +8,13 @@ using System.Diagnostics.CodeAnalysis;
 namespace Application.Tests.QrCodes.Commands;
 
 [ExcludeFromCodeCoverage]
-public sealed class UpdateQrCodeTargetTests
+public sealed class UpdateQrCodeTarget
 {
     private readonly Mock<IQrCodeTargetRepositoryService> _qrCodeTargetRepositoryServiceMock;
     private readonly Mock<IQrCodeHistoryRepositoryService> _qrCodeHistoryRepositoryServiceMock;
     private readonly CommandHandler _handler;
 
-    public UpdateQrCodeTargetTests()
+    public UpdateQrCodeTarget()
     {
         _qrCodeTargetRepositoryServiceMock = new Mock<IQrCodeTargetRepositoryService>();
         _qrCodeHistoryRepositoryServiceMock = new Mock<IQrCodeHistoryRepositoryService>();
