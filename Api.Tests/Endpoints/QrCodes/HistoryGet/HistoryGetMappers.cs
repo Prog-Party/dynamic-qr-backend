@@ -6,7 +6,7 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetQrCodeHisto
 namespace Api.Tests.Endpoints.QrCodes.HistoryGet;
 
 [ExcludeFromCodeCoverage]
-public sealed class HistoryGetMappersTests
+public sealed class HistoryGetMappers
 {
     [Fact]
     public void ToContract_HistoryGet_NullResponse_ReturnsNull()

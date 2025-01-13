@@ -16,14 +16,14 @@ using QrCodeGetEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeGet.QrCodeGet;
 namespace Api.Tests.Endpoints.QrCodes.QrCodeGet;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeGetTests
+public sealed class QrCodeGet
 {
     private readonly Mock<ILogger<QrCodeGetEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
     private readonly QrCodeGetEndpoint _endpoint;
 
-    public QrCodeGetTests()
+    public QrCodeGet()
     {
         _loggerMock = new Mock<ILogger<QrCodeGetEndpoint>>();
         _loggerMock.Setup(x => x.Log(

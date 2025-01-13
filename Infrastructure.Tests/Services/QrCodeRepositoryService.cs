@@ -13,13 +13,13 @@ using System.Text;
 namespace Infrastructure.Tests.Services;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeRepositoryServiceTests
+public sealed class QrCodeRepositoryService
 {
     private readonly Mock<TableClient> _tableClientMock;
     private readonly Mock<TableServiceClient> _tableServiceClientMock;
-    private readonly QrCodeRepositoryService _repositoryService;
+    private readonly DynamicQR.Infrastructure.Services.QrCodeRepositoryService _repositoryService;
 
-    public QrCodeRepositoryServiceTests()
+    public QrCodeRepositoryService()
     {
         _tableClientMock = new Mock<TableClient>();
         _tableServiceClientMock = new Mock<TableServiceClient>();
@@ -28,14 +28,14 @@ public sealed class QrCodeRepositoryServiceTests
             .Setup(client => client.GetTableClient(It.IsAny<string>()))
             .Returns(_tableClientMock.Object);
 
-        _repositoryService = new QrCodeRepositoryService(_tableServiceClientMock.Object);
+        _repositoryService = new DynamicQR.Infrastructure.Services.QrCodeRepositoryService(_tableServiceClientMock.Object);
     }
 
     [Fact]
     public void Constructor_NullTableServiceClient_ShouldThrowArgumentNullException()
     {
         // Act
-        Action act = () => new QrCodeRepositoryService(null!);
+        Action act = () => new DynamicQR.Infrastructure.Services.QrCodeRepositoryService(null!);
 
         // Assert
         act.Should().Throw<ArgumentNullException>().WithMessage("Value cannot be null. (Parameter 'tableServiceClient')");

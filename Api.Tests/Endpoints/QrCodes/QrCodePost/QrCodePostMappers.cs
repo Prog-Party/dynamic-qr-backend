@@ -7,7 +7,7 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.CreateQrCode.
 namespace Api.Tests.Endpoints.QrCodes.QrCodePost;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePostMappersTests
+public sealed class QrCodePostMappers
 {
     [Fact]
     public void ToCore_QrCodePost_NullRequest_ReturnsNull()
@@ -57,7 +57,6 @@ public sealed class QrCodePostMappersTests
         result.OrganizationId.Should().Be(organizationId);
         result.CustomerId.Should().Be(customerId);
     }
-
 
     [Fact]
     public void ToContract_QrCodePost_NullResponse_ReturnsNull()

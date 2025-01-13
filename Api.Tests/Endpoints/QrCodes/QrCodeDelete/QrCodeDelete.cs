@@ -13,14 +13,14 @@ using QrCodeDeleteEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeDelete.QrCode
 namespace Api.Tests.Endpoints.QrCodes.QrCodeDelete;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodeDeleteTests
+public sealed class QrCodeDelete
 {
     private readonly Mock<ILogger<QrCodeDeleteEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
     private readonly QrCodeDeleteEndpoint _endpoint;
 
-    public QrCodeDeleteTests()
+    public QrCodeDelete()
     {
         _loggerMock = new Mock<ILogger<QrCodeDeleteEndpoint>>();
         _loggerMock.Setup(x => x.Log(

@@ -15,14 +15,14 @@ using QrCodePostEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodePost.QrCodePost
 namespace Api.Tests.Endpoints.QrCodes.QrCodePost;
 
 [ExcludeFromCodeCoverage]
-public sealed class QrCodePostTest
+public sealed class QrCodePost
 {
     private readonly Mock<ILogger<QrCodePostEndpoint>> _loggerMock;
     private readonly Mock<ILoggerFactory> _loggerFactoryMock;
     private readonly Mock<IMediator> _mediatorMock;
     private readonly QrCodePostEndpoint _endpoint;
 
-    public QrCodePostTest()
+    public QrCodePost()
     {
         _loggerMock = new Mock<ILogger<QrCodePostEndpoint>>();
         _loggerMock.Setup(x => x.Log(
