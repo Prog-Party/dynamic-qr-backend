@@ -1,6 +1,6 @@
-﻿namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodePost;
 
-public sealed record Request
+public sealed record QrCodePostRequest
 {
     public bool IncludeMargin { get; init; }
     public string BackgroundColor { get; init; } = "#FFF";

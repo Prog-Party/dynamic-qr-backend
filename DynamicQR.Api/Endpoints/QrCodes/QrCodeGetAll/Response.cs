@@ -1,6 +1,6 @@
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll;
 
-public sealed record Response
+public sealed record QrCodeGetAllResponse
 {
     public string Id { get; init; } = string.Empty;
     public string BackgroundColor { get; init; } = "#FFF";

@@ -13,7 +13,7 @@ public sealed class QrCodePostMappersTests
     public void ToCore_QrCodePost_NullRequest_ReturnsNull()
     {
         // Arrange
-        Request? request = null;
+        QrCodePostRequest? request = null;
         string organizationId = "org123";
         string customerId = "cust123";
 
@@ -28,7 +28,7 @@ public sealed class QrCodePostMappersTests
     public void ToCore_QrCodePost_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new Request
+        var request = new QrCodePostRequest
         {
             BackgroundColor = "#FFFFFF",
             ForegroundColor = "#000000",

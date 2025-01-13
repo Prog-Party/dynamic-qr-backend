@@ -1,6 +1,6 @@
-﻿namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
+namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeGet;
 
-public sealed record Response
+public sealed record QrCodeGetResponse
 {
     public string Value { get; init; } = string.Empty;
     public bool IncludeMargin { get; init; }

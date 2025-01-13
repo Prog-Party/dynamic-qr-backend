@@ -90,7 +90,7 @@ public sealed class QrCodeGetTests
         });
         string id = "test-id";
 
-        var qrCodeResponse = new Response
+        var qrCodeResponse = new QrCodeGetResponse
         {
             IncludeMargin = true,
             BackgroundColor = "#FFFFFF",
@@ -117,7 +117,7 @@ public sealed class QrCodeGetTests
 
         // Assert
         response.StatusCode.Should().Be(HttpStatusCode.OK);
-        var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<Response>();
+        var body = await ((MockHttpResponseData)response).ReadAsJsonAsync<QrCodeGetResponse>();
 
         TestUtility.TestIfObjectsAreEqual(body, qrCodeResponse);
     }

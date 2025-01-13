@@ -12,7 +12,7 @@ public sealed class QrCodeTargetPutMappersTests
     public void ToCore_QrCodeTarget_NullRequest_ReturnsNull()
     {
         // Arrange
-        Request? request = null;
+        QrCodeTargetPutRequest? request = null;
         string id = "qr123";
         string organizationId = "org123";
         string customerId = "cust123";
@@ -28,7 +28,7 @@ public sealed class QrCodeTargetPutMappersTests
     public void ToCore_QrCodeTarget_ValidRequest_MapsToCommand()
     {
         // Arrange
-        var request = new Request
+        var request = new QrCodeTargetPutRequest
         {
             Value = "NewValue"
         };

@@ -12,7 +12,7 @@ using System.Drawing;
 using System.Net;
 using ApplicationResponse = DynamicQR.Application.QrCodes.Queries.GetAllQrCodes.Response;
 using QrCodeGetAllEndpoint = DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll.QrCodeGetAll;
-using Response = DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll.Response;
+using Response = DynamicQR.Api.Endpoints.QrCodes.QrCodeGetAll.QrCodeGetAllResponse;
 
 namespace Api.Tests.Endpoints.QrCodes.QrCodeGetAll;
 

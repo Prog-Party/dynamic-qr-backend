@@ -1,6 +1,6 @@
-﻿namespace DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut;
+namespace DynamicQR.Api.Endpoints.QrCodeTargets.QrCodeTargetPut;
 
-public sealed record Response
+public sealed record QrCodeTargetPutResponse
 {
     public string Id { get; init; } = string.Empty;
 }

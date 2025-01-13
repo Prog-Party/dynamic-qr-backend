@@ -1,6 +1,6 @@
 namespace DynamicQR.Api.Endpoints.QrCodes.HistoryGet;
 
-public sealed record Response
+public sealed record HistoryGetResponse
 {
     public string QrCodeId { get; init; } = string.Empty;
     public string Order { get; init; } = string.Empty;
