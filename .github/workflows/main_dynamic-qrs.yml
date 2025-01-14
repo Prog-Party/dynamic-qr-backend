@@ -35,6 +35,11 @@ jobs:
           dotnet restore
           dotnet build "DynamicQR.Api/DynamicQR.Api.csproj" --configuration Release --no-restore --output ./output
           popd
+
+      - name: 'Run Unit Tests'
+        shell: pwsh
+        run: |
+          dotnet test --configuration Release -p:BUILDCONFIGURATION=Release -p:SkipPostBuild=true --no-build --verbosity normal
       
       - name: Login to Azure
         uses: azure/login@v2
