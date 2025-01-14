@@ -1,10 +1,11 @@
-﻿using MediatR;
+﻿using Azure.Core.Serialization;
+using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using System.Net;
+using System.Text.Json;
 
 namespace DynamicQR.Api.Endpoints;
 
@@ -31,15 +32,12 @@ public abstract class EndpointsBase
         if (body == null)
             body = new { };
 
-        var jsonSettings = new JsonSerializerSettings
+        var serializer = new JsonObjectSerializer(new JsonSerializerOptions
         {
-            ContractResolver = new DefaultContractResolver
-            {
-                NamingStrategy = new CamelCaseNamingStrategy()
-            }
-        };
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
 
-        await response.WriteAsJsonAsync(body, jsonSettings).ConfigureAwait(false);
+        await response.WriteAsJsonAsync(body, serializer).ConfigureAwait(false);
 
         return response;
     }
