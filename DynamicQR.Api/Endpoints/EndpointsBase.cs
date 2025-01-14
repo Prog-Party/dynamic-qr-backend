@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Net;
 
 namespace DynamicQR.Api.Endpoints;
@@ -30,7 +31,15 @@ public abstract class EndpointsBase
         if (body == null)
             body = new { };
 
-        await response.WriteAsJsonAsync(body).ConfigureAwait(false);
+        var jsonSettings = new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver
+            {
+                NamingStrategy = new CamelCaseNamingStrategy()
+            }
+        };
+
+        await response.WriteAsJsonAsync(body, jsonSettings).ConfigureAwait(false);
 
         return response;
     }
