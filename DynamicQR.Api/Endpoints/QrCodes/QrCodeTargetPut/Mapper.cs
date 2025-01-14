@@ -3,9 +3,9 @@ using ApplicationResponse = DynamicQR.Application.QrCodes.Commands.UpdateQrCodeT
 
 namespace DynamicQR.Api.Endpoints.QrCodes.QrCodeTargetPut;
 
-public static class Mapper
+internal static class Mapper
 {
-    public static ApplicationCommand? ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
+    internal static ApplicationCommand? ToCore(QrCodeTargetPutRequest request, string id, string organizationId, string customerId)
         => request is null ? null : new ApplicationCommand
         {
             Id = id,
@@ -14,7 +14,7 @@ public static class Mapper
             Value = request.Value
         };
 
-    public static QrCodeTargetPutResponse? ToContract(ApplicationResponse response)
+    internal static QrCodeTargetPutResponse? ToContract(ApplicationResponse response)
         => response is null ? null : new QrCodeTargetPutResponse
         {
             Id = response.Id,
