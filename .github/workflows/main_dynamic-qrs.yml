@@ -32,15 +32,21 @@ jobs:
         shell: pwsh
         run: |
           pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-          dotnet build --configuration Release --output ./output
+          dotnet restore
+          dotnet build "DynamicQR.Api/DynamicQR.Api.csproj" --configuration Release --no-restore --output ./output
           popd
+
+      - name: 'Run Unit Tests'
+        shell: pwsh
+        run: |
+          dotnet test --configuration Release -p:BUILDCONFIGURATION=Release -p:SkipPostBuild=true --no-build --verbosity normal
       
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_33B160DF77664111BCC4ADE43065C658 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_4F4C13A5B8CC46D1A001B9ABB0E98811 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_A4A5094F5A0E4CA5A6E9F123CEDD36B4 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_ABDBA522FAD149479DDD7B864B1594A4 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_06AC50CC323D4C34903DF8AE869B521D }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_351A8DE12E944B059D0E7825242D82E2 }}
 
       - name: 'Run Azure Functions Action'
         uses: Azure/functions-action@v1

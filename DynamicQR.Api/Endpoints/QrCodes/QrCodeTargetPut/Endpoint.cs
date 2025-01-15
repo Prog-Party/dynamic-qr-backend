@@ -20,7 +20,7 @@ public sealed class QrCodeTargetPut : EndpointsBase
     { }
 
     [Function(nameof(QrCodeTargetPut))]
-    [OpenApiOperation(nameof(QrCodeTargetPut), Tags.QrCodeTarget,
+    [OpenApiOperation(nameof(QrCodeTargetPut), Tags.QrCode,
        Summary = "Update a certain qr code target.")
     ]
     [OpenApiHeaderOrganizationIdentifier]

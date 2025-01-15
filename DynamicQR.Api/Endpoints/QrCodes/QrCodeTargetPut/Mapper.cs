@@ -14,7 +14,7 @@ internal static class Mapper
             Value = request.Value
         };
 
-    public static QrCodeTargetPutResponse ToContract(ApplicationResponse response)
+    internal static QrCodeTargetPutResponse ToContract(ApplicationResponse response)
         => response is null ? throw new ArgumentNullException(nameof(response)) : new QrCodeTargetPutResponse
         {
             Id = response.Id,
