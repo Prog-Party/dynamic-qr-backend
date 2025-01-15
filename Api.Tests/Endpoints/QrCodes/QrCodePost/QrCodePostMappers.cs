@@ -18,10 +18,7 @@ public sealed class QrCodePostMappers
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request!, organizationId, customerId);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => Mapper.ToCore(request!, organizationId, customerId));
     }
 
     [Fact]
@@ -65,10 +62,7 @@ public sealed class QrCodePostMappers
         ApplicationResponse? response = null;
 
         // Act
-        var result = Mapper.ToContract(response!);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => Mapper.ToContract(response!));
     }
 
     [Fact]

@@ -15,10 +15,7 @@ public sealed class HistoryGetMappers
         ApplicationResponse? response = null;
 
         // Act
-        var result = Mapper.ToContract(response!);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => Mapper.ToContract(response!));
     }
 
     [Fact]

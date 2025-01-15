@@ -18,10 +18,7 @@ public sealed class QrCodeTargetPutMappers
         string customerId = "cust123";
 
         // Act
-        var result = Mapper.ToCore(request!, id, organizationId, customerId);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => Mapper.ToCore(request!, id, organizationId, customerId));
     }
 
     [Fact]
@@ -54,10 +51,7 @@ public sealed class QrCodeTargetPutMappers
         ApplicationResponse? response = null;
 
         // Act
-        var result = Mapper.ToContract(response!);
-
-        // Assert
-        result.Should().BeNull();
+        Assert.Throws<ArgumentNullException>(() => Mapper.ToContract(response!));
     }
 
     [Fact]

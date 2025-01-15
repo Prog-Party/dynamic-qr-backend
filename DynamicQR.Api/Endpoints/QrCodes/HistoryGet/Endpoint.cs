@@ -37,10 +37,7 @@ public sealed class HistoryGet : EndpointsBase
 
         List<ApplicationResponse> coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        List<HistoryGetResponse> historyResponses = coreResponse?.Select(Mapper.ToContract)
-                                                       .Where(x => x != null)
-                                                       .Select(x => x!)
-                                                       .ToList() ?? new();
+        List<HistoryGetResponse> historyResponses = coreResponse.Select(Mapper.ToContract).ToList();
 
         return await CreateJsonResponse(req, historyResponses);
     }

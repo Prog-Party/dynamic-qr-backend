@@ -3,8 +3,8 @@ using ApplicationResponse = Application.QrCodes.Queries.GetQrCodeHistory.Respons
 
 internal static class Mapper
 {
-    internal static HistoryGetResponse? ToContract(ApplicationResponse response)
-        => response is null ? null : new HistoryGetResponse
+    internal static HistoryGetResponse ToContract(ApplicationResponse response)
+        => response is null ? throw new ArgumentNullException(nameof(response)) : new HistoryGetResponse
         {
             QrCodeId = response.QrCodeId,
             Order = response.Order,

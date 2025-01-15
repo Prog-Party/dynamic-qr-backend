@@ -36,10 +36,7 @@ public sealed class QrCodeGetAll : EndpointsBase
 
         List<ApplicationResponse> coreResponse = await _mediator.Send(coreRequest, cancellationToken);
 
-        List<QrCodeGetAllResponse> qrCodeResponses = coreResponse?.Select(Mapper.ToContract)
-                                                      .Where(x => x != null)
-                                                      .Select(x => x!)
-                                                      .ToList() ?? new();
+        List<QrCodeGetAllResponse> qrCodeResponses = coreResponse.Select(Mapper.ToContract).ToList();
 
         return await CreateJsonResponse(req, qrCodeResponses);
     }
